@@ -1,4 +1,4 @@
-FROM faizanasghar43/facial-image-recognition-flask
+FROM faizanasghar43/real-time-flask-facial-clock
 COPY . /app
 WORKDIR /app
 RUN pip3 install -r requirements.txt
