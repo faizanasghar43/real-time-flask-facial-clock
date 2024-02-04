@@ -45,7 +45,7 @@ def gen_frame():
                     top, right, bottom, left = face_location
                     cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
                     font = cv2.FONT_HERSHEY_DUPLEX
-                    cv2.putText(frame, f'username: {username}', (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+                    # cv2.putText(frame, f'username: {username}', (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
                     cv2.putText(frame, f'last seen: {last_seen_time}', (left + 6, bottom + 15), font, 0.5,
                                 (255, 255, 255), 1)
                 else:
