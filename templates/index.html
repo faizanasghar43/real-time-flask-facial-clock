@@ -1,7 +1,42 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    #}
+{#<body>#}
+{##}
+{#<div class="container">#}
+{#    <h1>ClockWise Smart Clock</h1>#}
+{#    <img src="/video_feed" class="video-feed"/>#}
+{##}
+{#</div>#}
+{##}
+{#<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>#}
+{#<script>#}
+{#    var socket = io.connect('http://' + document.domain + ':' + location.port);#}
+{##}
+{#    socket.on('connect', function () {#}
+{#        console.log('Websocket connected!');#}
+{#    });#}
+{##}
+{#    socket.on('last_seen_update', function (data) {#}
+{#        console.log('Last seen time updated for:', data.username);#}
+{#        var lastSeenTime = new Date(data.last_seen);#}
+{#        var formattedTime = lastSeenTime.toLocaleTimeString('en-US', {#}
+{#            hour: '2-digit',#}
+{#            minute: '2-digit',#}
+{#            second: '2-digit',#}
+{#            hour12: true#}
+{#        });#}
+{#        document.getElementById('lastSeenTime').innerText = `Last seen ${data.username} at ${formattedTime}`;#}
+{#    });#}
+{##}
+{#</script>#}
+{##}
+{#</body>#}
+{#</html>#}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClockWise Smart Clock</title>
@@ -40,30 +75,48 @@
 
 <div class="container">
     <h1>ClockWise Smart Clock</h1>
-    <img src="/video_feed" class="video-feed"/>
-
+    <video id="videoElement" class="video-feed" autoplay playsinline></video>
+    <div id="lastSeenTime" class="last-seen"></div>
 </div>
 
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 <script>
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+    // Access the video element
+    var videoElement = document.getElementById('videoElement');
+
+    // Prompt the user to get the media streams
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                videoElement.srcObject = stream;
+
+                // Prepare to send frames to the server
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                // Function to send the frame to the server
+                function sendFrame() {
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+                    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    var data = canvas.toDataURL('image/jpeg');
+                    socket.emit('video_frame', {data: data});
+                }
+
+                // Send frames every 100 milliseconds
+                setInterval(sendFrame, 100);
+            })
+            .catch(function (error) {
+                console.log("Something went wrong!", error);
+            });
+    }
+
+    // Handle incoming data
     socket.on('connect', function () {
         console.log('Websocket connected!');
     });
-
-    socket.on('last_seen_update', function (data) {
-        console.log('Last seen time updated for:', data.username);
-        var lastSeenTime = new Date(data.last_seen);
-        var formattedTime = lastSeenTime.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        });
-        document.getElementById('lastSeenTime').innerText = `Last seen ${data.username} at ${formattedTime}`;
-    });
-
 </script>
 
 </body>
