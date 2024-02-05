@@ -9,7 +9,6 @@ Flask-SocketIO==5.3.6  # Latest
 gevent==23.9.1  # Latest
 gevent-websocket==0.10.1  # Only version provided
 greenlet==3.0.3  # Latest
-gunicorn==21.2.0  # Latest
 h11==0.14.0  # Only version provided
 itsdangerous==2.1.2  # Latest
 Jinja2==3.1.3  # Latest
@@ -29,4 +28,5 @@ Werkzeug==3.0.1  # Latest
 wsproto==1.2.0  # Only version provided
 zope.event==5.0  # Only version provided
 zope.interface==6.1  # Latest
-eventlet>=0.24.1
+gunicorn==20.1.0
+eventlet==0.30.2
