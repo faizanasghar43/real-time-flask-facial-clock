@@ -29,3 +29,4 @@ Werkzeug==3.0.1  # Latest
 wsproto==1.2.0  # Only version provided
 zope.event==5.0  # Only version provided
 zope.interface==6.1  # Latest
+eventlet>=0.24.1
