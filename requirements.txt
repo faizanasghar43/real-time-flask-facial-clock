@@ -42,4 +42,4 @@ pytz==2023.4
 simple-websocket==1.0.0
 zope.event==5.0
 zope.interface==6.1
-eventlet==0.24.1
+eventlet==0.25.1
