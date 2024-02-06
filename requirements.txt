@@ -30,4 +30,3 @@ zope.event==5.0  # Only version provided
 zope.interface==6.1  # Latest
 gunicorn==20.1.0
 eventlet==0.30.2
-
