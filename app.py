@@ -118,7 +118,9 @@ import time
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-video = cv2.VideoCapture(0)  # Initialize your video capture device
+# video = cv2.VideoCapture(0)  # Initialize your video capture device
+video_index = cv2.CAP_ANY  # Use any available camera
+video = cv2.VideoCapture(video_index)
 
 csv_file = 'known_faces.csv'
 df = pd.read_csv(csv_file) if os.path.exists(csv_file) else pd.DataFrame(
@@ -130,8 +132,10 @@ NEW_FACE_COOLDOWN = 5  # Time in seconds before a new face can be added again
 
 last_new_face_time = None  # Keep track of the last time a new face was added
 
+
 def save_known_faces():
     df.to_csv(csv_file, index=False)
+
 
 def gen_frame():
     global df, last_new_face_time
@@ -161,11 +165,13 @@ def gen_frame():
                                 (255, 255, 255), 1)
                 else:
                     current_time = datetime.datetime.now()
-                    if last_new_face_time is None or (current_time - last_new_face_time).total_seconds() > NEW_FACE_COOLDOWN:
+                    if last_new_face_time is None or (
+                            current_time - last_new_face_time).total_seconds() > NEW_FACE_COOLDOWN:
                         new_face_id = f"face_{len(df) + 1}"
                         current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S')
-                        new_row = pd.DataFrame({'username': [new_face_id], 'face_encoding': [str(face_encoding.tolist())],
-                                                'last_seen': [current_time_str]})
+                        new_row = pd.DataFrame(
+                            {'username': [new_face_id], 'face_encoding': [str(face_encoding.tolist())],
+                             'last_seen': [current_time_str]})
                         df = pd.concat([df, new_row], ignore_index=True)
                         save_known_faces()
                         socketio.emit('last_seen_update', {
@@ -204,6 +210,7 @@ def gen_frame():
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
 
 @app.route('/video_feed')
 def video_feed():
