@@ -1,76 +1,3 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
-{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
-{#    <title>ClockWise</title>#}
-{#    <style>#}
-{#        body {#}
-{#            font-family: Arial, sans-serif;#}
-{#            margin: 0;#}
-{#            padding: 0;#}
-{#            background: #f3f4f6;#}
-{#            display: flex;#}
-{#            justify-content: center;#}
-{#            align-items: center;#}
-{#            height: 100vh;#}
-{#        }#}
-{##}
-{#        .container {#}
-{#            background: #fff;#}
-{#            padding: 20px;#}
-{#            border-radius: 5px;#}
-{#            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);#}
-{#        }#}
-{##}
-{#        .video-feed {#}
-{#            width: 650px;#}
-{#            height: 490px;#}
-{#            background: #ddd;#}
-{#            margin-bottom: 20px;#}
-{#        }#}
-{##}
-{#        .last-seen {#}
-{#            margin-top: 20px;#}
-{#        }#}
-{#    </style>#}
-{#</head>#}
-{##}
-{#<body>#}
-{##}
-{#<div class="container">#}
-{#    <h1>ClockWise Smart Clock</h1>#}
-{#    <img src="/video_feed" class="video-feed"/>#}
-{#<video src="/video_feed" id="video" width="640" height="320" autoplay></video>#}
-{#</div>#}
-{##}
-{#<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>#}
-{##}
-{#<script>#}
-{#    var socket = io.connect('https://' + document.domain + ':' + location.port);#}
-{##}
-{#    socket.on('connect', function () {#}
-{#        console.log('Websocket connected!');#}
-{#    });#}
-{##}
-{#    socket.on('last_seen_update', function (data) {#}
-{#        console.log('Last seen time updated for:', data.username);#}
-{#        var lastSeenTime = new Date(data.last_seen);#}
-{#        var formattedTime = lastSeenTime.toLocaleTimeString('en-US', {#}
-{#            hour: '2-digit',#}
-{#            minute: '2-digit',#}
-{#            second: '2-digit',#}
-{#            hour12: true#}
-{#        });#}
-{#        document.getElementById('lastSeenTime').innerText = `Last seen ${data.username} at ${formattedTime}`;#}
-{#    });#}
-{##}
-{#</script>#}
-{##}
-{#</body>#}
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,6 +43,21 @@
     </div>
 
     <script>
+        navigator.permissions.query({name: 'microphone'})
+ .then((permissionObj) => {
+  console.log(permissionObj.state);
+ })
+ .catch((error) => {
+  console.log('Got error :', error);
+ })
+
+ navigator.permissions.query({name: 'camera'})
+ .then((permissionObj) => {
+  console.log(permissionObj.state);
+ })
+ .catch((error) => {
+  console.log('Got error :', error);
+ })
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let context = canvas.getContext('2d');

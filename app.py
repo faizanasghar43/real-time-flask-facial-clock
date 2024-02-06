@@ -245,10 +245,8 @@ import io
 app = Flask(__name__)
 
 csv_file = 'known_faces.csv'
-# df = pd.read_csv(csv_file) if os.path.exists(csv_file) else pd.DataFrame(
 df = pd.read_csv(csv_file) if os.path.exists(csv_file) else pd.DataFrame(
         columns=['username', 'face_encoding', 'last_seen'])
-#     columns=['username', 'face_encoding', 'last_seen'])
 
 def save_known_faces():
     df.to_csv(csv_file, index=False)
