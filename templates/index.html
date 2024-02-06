@@ -1,10 +1,82 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>ClockWise</title>#}
+{#    <style>#}
+{#        body {#}
+{#            font-family: Arial, sans-serif;#}
+{#            margin: 0;#}
+{#            padding: 0;#}
+{#            background: #f3f4f6;#}
+{#            display: flex;#}
+{#            justify-content: center;#}
+{#            align-items: center;#}
+{#            height: 100vh;#}
+{#        }#}
+{##}
+{#        .container {#}
+{#            background: #fff;#}
+{#            padding: 20px;#}
+{#            border-radius: 5px;#}
+{#            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);#}
+{#        }#}
+{##}
+{#        .video-feed {#}
+{#            width: 650px;#}
+{#            height: 490px;#}
+{#            background: #ddd;#}
+{#            margin-bottom: 20px;#}
+{#        }#}
+{##}
+{#        .last-seen {#}
+{#            margin-top: 20px;#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{##}
+{#<body>#}
+{##}
+{#<div class="container">#}
+{#    <h1>ClockWise Smart Clock</h1>#}
+{#    <img src="/video_feed" class="video-feed"/>#}
+{#<video src="/video_feed" id="video" width="640" height="320" autoplay></video>#}
+{#</div>#}
+{##}
+{#<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>#}
+{##}
+{#<script>#}
+{#    var socket = io.connect('https://' + document.domain + ':' + location.port);#}
+{##}
+{#    socket.on('connect', function () {#}
+{#        console.log('Websocket connected!');#}
+{#    });#}
+{##}
+{#    socket.on('last_seen_update', function (data) {#}
+{#        console.log('Last seen time updated for:', data.username);#}
+{#        var lastSeenTime = new Date(data.last_seen);#}
+{#        var formattedTime = lastSeenTime.toLocaleTimeString('en-US', {#}
+{#            hour: '2-digit',#}
+{#            minute: '2-digit',#}
+{#            second: '2-digit',#}
+{#            hour12: true#}
+{#        });#}
+{#        document.getElementById('lastSeenTime').innerText = `Last seen ${data.username} at ${formattedTime}`;#}
+{#    });#}
+{##}
+{#</script>#}
+{##}
+{#</body>#}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClockWise</title>
+    <title>ClockWise Smart Clock</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,50 +94,61 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
-        .video-feed {
-            width: 650px;
-            height: 490px;
-            background: #ddd;
-            margin-bottom: 20px;
+        video, canvas {
+            width: 640px;
+            height: 480px;
         }
 
-        .last-seen {
+        #userInfo {
             margin-top: 20px;
         }
     </style>
 </head>
-
 <body>
+    <div class="container">
+        <h1>ClockWise Smart Clock</h1>
+        <video id="video" width="640" height="480" autoplay></video>
+        <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+        <div id="userInfo"></div>
+    </div>
 
-<div class="container">
-    <h1>ClockWise Smart Clock</h1>
-    <img src="/video_feed" class="video-feed"/>
+    <script>
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let context = canvas.getContext('2d');
+        let userInfoDiv = document.getElementById('userInfo');
 
-</div>
+        function updateUserInfo(data) {
+            userInfoDiv.innerHTML = `Username: ${data.username}<br>Last Seen: ${data.last_seen}`;
+        }
 
-<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => video.srcObject = stream)
+            .catch(error => console.error('Error accessing media devices.', error));
 
-<script>
-    var socket = io.connect('https://' + document.domain + ':' + location.port);
+        setInterval(() => {
+            context.drawImage(video, 0, 0, 640, 480);
+            let imageDataUrl = canvas.toDataURL('image/png');
 
-    socket.on('connect', function () {
-        console.log('Websocket connected!');
-    });
-
-    socket.on('last_seen_update', function (data) {
-        console.log('Last seen time updated for:', data.username);
-        var lastSeenTime = new Date(data.last_seen);
-        var formattedTime = lastSeenTime.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        });
-        document.getElementById('lastSeenTime').innerText = `Last seen ${data.username} at ${formattedTime}`;
-    });
-
-</script>
-
+            fetch('/process_frame', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: imageDataUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateUserInfo(data);
+                }
+                console.log(data);  // For debugging
+            })
+            .catch(error => console.error('Error sending frame.', error));
+        }, 100); // Capture frame every 100ms, adjust this value as needed
+    </script>
 </body>
+</html>
