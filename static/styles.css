@@ -1,0 +1,135 @@
+/* Base styles for both pages */
+@font-face {
+    font-family: 'ClockWork';
+    src: url('/static/fonts/ClockWork.ttf') format('truetype');
+
+
+}
+@font-face {
+    font-family: 'AtomicClockRadio';
+    src: url('/static/fonts/AtomicClockRadio.ttf') format('truetype');
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif; /* Use Orbitron for a techy feel, ensure it's linked in your HTML */
+    background-color: white; /* Light mode background */
+    color: #333333; /* Light mode text */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for theme change */
+}
+
+body {
+    font-family: 'OrbitronCustom', sans-serif;
+}
+
+nav {
+    width: 100%;
+    background-color: #333333; /* Darker shade for navbar in light mode */
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center; /* Center nav items */
+}
+nav {
+    width: 100%;
+    background-color: #333333; /* Darker shade for navbar in light mode */
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+    padding-right: 20px; /* Adjust based on your layout */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px; /* Spacing between nav links */
+    font-size: 18px;
+
+}
+
+.container {
+    margin: 20px auto;
+    max-width: 800px; /* Max width for the content */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for container */
+    background-color: #F9F9F9; /* Light background for content */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for theme change */
+}
+
+h1, h2 {
+    color: #D32F2F; /* Accent color for headings */
+}
+
+p, a {
+    font-size: 16px; /* Readable font size */
+}
+
+a {
+    color: #0066CC; /* Default link color */
+}
+
+/*!* Dark mode styles *!*/
+/*@media (prefers-color-scheme: dark) {*/
+/*    body, html {*/
+/*        background-color: #121212; !* Dark mode background *!*/
+/*        color: #E0E0E0; !* Dark mode text *!*/
+/*    }*/
+
+/*    nav {*/
+/*        background-color: #000000; !* Darker navbar background in dark mode *!*/
+/*    }*/
+
+/*    .container {*/
+/*        background-color: #242424; !* Dark background for content *!*/
+/*        box-shadow: 0 2px 4px rgba(255,255,255,0.1); !* Soft shadow for container in dark mode *!*/
+/*    }*/
+
+/*    a {*/
+/*        color: #4D90FE; !* Brighter link color for dark mode *!*/
+/*    }*/
+/*}*/
+/* Hide video and canvas */
+video, canvas {
+    display: none;
+}
+
+/* Centering ClockWise text and clock */
+#ClockWise, #clock {
+    text-align: center; /* Centers the text */
+    width: 100%; /* Ensures full width for proper centering */
+}
+
+/* Additional styling for the ClockWise title to differentiate it */
+#ClockWise {
+    font-family: 'ClockWork', sans-serif; /* Applies your custom font */
+    margin-top: 2rem; /* Adds some space at the top */
+    font-size: 5rem; /* Adjust the font size as needed */
+}
+
+/* Styling for the clock to ensure it is visually distinct and properly centered */
+#userInfo {
+    margin-top: 20px; /* Space between the title and the clock */
+    font-size: 2rem; /* Large font size for visibility */
+    letter-spacing: 5px; /* Add spacing between characters */
+    font-family: 'AtomicClockRadio', sans-serif; /* Ensures consistency with the rest of the body */
+}
+
+/* Ensuring the .container is centered and adjusts its layout properly */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 60px); /* Adjusts height to ensure full vertical centering minus nav */
+}
+
+.logo {
+    height: 50px; /* Adjust based on your preference */
+    margin-right: auto;
+    mix-blend-mode: multiply;
+}

@@ -3,85 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
     <title>ClockWise</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f3f4f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        video, canvas {
-            width: 640px;
-            height: 480px;
-        }
-
-        #userInfo {
-            margin-top: 20px;
-        }
-    </style>
+{#    <style>#}
+{#        body {#}
+{#            font-family: 'Orbitron', sans-serif;#}
+{#            margin: 0;#}
+{#            padding: 0;#}
+{#            background: #f3f4f6;#}
+{#            display: flex;#}
+{#            justify-content: center;#}
+{#            align-items: center;#}
+{#            height: 100vh;#}
+{#            color: #D32F2F; /* Red color similar to the one in the image */#}
+{#        }#}
+{##}
+{#        .container {#}
+{#            background: #fff;#}
+{#            padding: 20px;#}
+{#            border-radius: 5px;#}
+{#            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);#}
+{#            text-align: center;#}
+{#        }#}
+{##}
+{#        #clock {#}
+{#            font-size: 60px; /* Large font size for visibility */#}
+{#            letter-spacing: 5px; /* Add spacing between characters */#}
+{#        }#}
+{##}
+{#        /* Hiding the video stream */#}
+{#        video, canvas {#}
+{#            display: none;#}
+{#        }#}
+{#    </style>#}
 </head>
 <body>
-    <div class="container">
-        <h1>ClockWise Smart Clock</h1>
-        <video id="video" width="640" height="480" autoplay></video>
-        <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-        <div id="userInfo"></div>
-    </div>
+<nav>
+        <img src="{{ url_for('static', filename='clock.png') }}" alt="ClockWise Logo" class="logo">
 
-    <script>
-        navigator.permissions.query({name: 'microphone'})
- .then((permissionObj) => {
-  console.log(permissionObj.state);
- })
- .catch((error) => {
-  console.log('Got error :', error);
- })
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+</nav>
+<div class="container">
+    <h1 id="ClockWise">ClockWise</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <div id="userInfo"></div>
+</div>
 
- navigator.permissions.query({name: 'camera'})
- .then((permissionObj) => {
-  console.log(permissionObj.state);
- })
- .catch((error) => {
-  console.log('Got error :', error);
- })
-        let video = document.getElementById('video');
-        let canvas = document.getElementById('canvas');
-        let context = canvas.getContext('2d');
-        let userInfoDiv = document.getElementById('userInfo');
+<script>
+    navigator.permissions.query({name: 'microphone'})
+        .then((permissionObj) => {
+            console.log(permissionObj.state);
+        })
+        .catch((error) => {
+            console.log('Got error :', error);
+        })
 
-        function updateUserInfo(data) {
-            userInfoDiv.innerHTML = `Last Seen: ${data.last_seen}`;
-        }
+    navigator.permissions.query({name: 'camera'})
+        .then((permissionObj) => {
+            console.log(permissionObj.state);
+        })
+        .catch((error) => {
+            console.log('Got error :', error);
+        })
+    let video = document.getElementById('video');
+    let canvas = document.getElementById('canvas');
+    let context = canvas.getContext('2d');
+    let userInfoDiv = document.getElementById('userInfo');
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => video.srcObject = stream)
-            .catch(error => console.error('Error accessing media devices.', error));
+    function updateUserInfo(data) {
+        userInfoDiv.innerHTML = `Last Seen: ${data.last_seen}`
+    }
 
-        setInterval(() => {
-            context.drawImage(video, 0, 0, 640, 480);
-            let imageDataUrl = canvas.toDataURL('image/png');
+    navigator.mediaDevices.getUserMedia({video: true})
+        .then(stream => video.srcObject = stream)
+        .catch(error => console.error('Error accessing media devices.', error));
 
-            fetch('/process_frame', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ image: imageDataUrl })
-            })
+    setInterval(() => {
+        context.drawImage(video, 0, 0, 640, 480);
+        let imageDataUrl = canvas.toDataURL('image/png');
+
+        fetch('/process_frame', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({image: imageDataUrl})
+        })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
@@ -90,7 +101,86 @@
                 console.log(data);  // For debugging
             })
             .catch(error => console.error('Error sending frame.', error));
-        }, 100); // Capture frame every 100ms, adjust this value as needed
-    </script>
+    }, 100); // Capture frame every 100ms, adjust this value as needed
+</script>
 </body>
 </html>
+{##}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>ClockWise</title>#}
+{#        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">#}
+{##}
+{#    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#<nav>#}
+{#    <a href="/">Home</a>#}
+{#    <a href="/about">About</a>#}
+{#</nav>#}
+{#<div class="container">#}
+{#    <h1 id="ClockWise">ClockWise</h1>#}
+{#    <video id="video" width="640" height="480" autoplay></video>#}
+{#    <canvas id="canvas" width="640" height="480"></canvas>#}
+{#    <div id="userInfo"></div>#}
+{#    <div id="clock"></div>#}
+{#</div>#}
+{##}
+{#<script>#}
+{#    let video = document.getElementById('video');#}
+{#    let canvas = document.getElementById('canvas');#}
+{#    let context = canvas.getContext('2d');#}
+{#    let userInfoDiv = document.getElementById('userInfo');#}
+{#    let clockDiv = document.getElementById('clock');#}
+{#    let faceDetected = false;#}
+{##}
+{#    function showTime() {#}
+{#        const now = new Date();#}
+{#        const hours = now.getHours().toString().padStart(2, '0');#}
+{#        const minutes = now.getMinutes().toString().padStart(2, '0');#}
+{#        const seconds = now.getSeconds().toString().padStart(2, '0');#}
+{#        clockDiv.textContent = `${hours}:${minutes}:${seconds}`;#}
+{#    }#}
+{##}
+{#    function updateUserInfo(data) {#}
+{#        userInfoDiv.innerHTML = `Last Seen: ${data.last_seen}`;#}
+{#    }#}
+{##}
+{#    navigator.mediaDevices.getUserMedia({video: true})#}
+{#        .then(stream => video.srcObject = stream)#}
+{#        .catch(error => console.error('Error accessing media devices.', error));#}
+{##}
+{#    const intervalId = setInterval(() => {#}
+{#        if (faceDetected) {#}
+{#            return;#}
+{#        }#}
+{##}
+{#        context.drawImage(video, 0, 0, 640, 480);#}
+{#        let imageDataUrl = canvas.toDataURL('image/png');#}
+{##}
+{#        fetch('/process_frame', {#}
+{#            method: 'POST',#}
+{#            headers: {#}
+{#                'Content-Type': 'application/json'#}
+{#            },#}
+{#            body: JSON.stringify({image: imageDataUrl})#}
+{#        })#}
+{#            .then(response => response.json())#}
+{#            .then(data => {#}
+{#                if (data.face_detected) {#}
+{#                    faceDetected = true;#}
+{#                    clearInterval(intervalId); // Stop sending frames#}
+{#                    video.style.display = 'none'; // Optionally hide the video element#}
+{#                    clockDiv.style.display = 'block'; // Show the clock#}
+{#                    setInterval(showTime, 1000); // Update the clock every second#}
+{#                }#}
+{#                console.log(data); // For debugging#}
+{#            })#}
+{#            .catch(error => console.error('Error sending frame.', error));#}
+{#    }, 100); // Capture frame every 100ms#}
+{#</script>#}
+{#</body>#}
+{#</html>#}

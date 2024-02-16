@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <title>About ClockWise</title>
+    {#    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->#}
+{#    <style>#}
+{#        body {#}
+{#            font-family: Arial, sans-serif;#}
+{#            margin: 0;#}
+{#            padding: 20px;#}
+{#            background: #f3f4f6;#}
+{#            color: #333;#}
+{#        }#}
+{##}
+{#        .container {#}
+{#            max-width: 800px;#}
+{#            margin: auto;#}
+{#            background: white;#}
+{#            padding: 20px;#}
+{#            border-radius: 8px;#}
+{#            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);#}
+{#        }#}
+{##}
+{#        .container {#}
+{#            background-image: initial;#}
+{#            background-color: rgb(24, 26, 27);#}
+{#            box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;#}
+{#        }#}
+{##}
+{#        h1, h2 {#}
+{#            color: #D32F2F;#}
+{#        }#}
+{##}
+{#        p {#}
+{#            line-height: 1.6;#}
+{#        }#}
+{##}
+{#        nav {#}
+{#            width: 100%;#}
+{#            background: #333;#}
+{#            display: flex;#}
+{#            justify-content: space-around;#}
+{#            padding: 10px 0;#}
+{#            box-shadow: 0 2px 4px rgba(0, 0, 0, .3);#}
+{#        }#}
+{##}
+{#        nav a {#}
+{#            color: white;#}
+{#            text-decoration: none;#}
+{#            font-size: 18px;#}
+{#        }#}
+{##}
+{#    </style>#}
+</head>
+<body>
+<nav>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="ClockWise Logo" class="logo">
+
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+</nav>
+<div class="container">
+    <h1>About ClockWise</h1>
+    <h2>Artist: Jonah Brucker-Cohen</h2>
+    <p>
+        ClockWise is a “smart” clock that will only tell you the time it was the last time you checked it. Utilizing a
+        combination of artificial intelligence and face detection, the clock can identify its viewer and show them only
+        the time the last they looked at the clock face. Inspired by the "forgetting curve" discovered by German
+        psychologist Hermann Ebbinghaus in the 1880s, ClockWise challenges our memory retention by displaying the time
+        of our last glance, compelling us to reinforce our knowledge or seek the current time elsewhere.
+    </p>
+    <h2>System</h2>
+    <p>
+        The project operates through software that links to a camera for face detection. Upon recognizing a viewer,
+        ClockWise displays the time of their last visit. For repeat viewers, it shows the last time they checked,
+        creating a unique interaction that plays on human memory and the concept of time perception. New faces trigger
+        the clock to record the current time, storing this data to display upon their return. This inventive approach
+        reimagines the traditional clock, making each glance a personal and reflective experience.
+    </p>
+    <p>For more information, visit <a href="http://www.coin-operated.com" target="_blank">www.coin-operated.com</a>.</p>
+</div>
+</body>
+</html>
