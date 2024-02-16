@@ -2,12 +2,16 @@
 @font-face {
     font-family: 'ClockWork';
     src: url('/static/fonts/ClockWork.ttf') format('truetype');
+        font-display: swap; /* This will swap the font once it's loaded */
+
 
 
 }
 @font-face {
     font-family: 'AtomicClockRadio';
     src: url('/static/fonts/AtomicClockRadio.ttf') format('truetype');
+        font-display: swap; /* This will swap the font once it's loaded */
+
 }
 
 body, html {
