@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Add User</title>
+    <style>
+        video {
+            width: 100%;
+            max-width: 400px;
+        }
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="h1">Welcome to clockwise, please add your name and face</h1>
+    <form method="post" action="/add_info" enctype="multipart/form-data">
+        <input type="text" name="username" placeholder="Enter your username" required>
+        <br><br>
+        <video id="video" playsinline autoplay></video>
+        <button type="button" id="capture">Capture Photo</button>
+        <canvas id="canvas" width="640" height="480"></canvas>
+        <!-- This input field is used to submit the base64 encoded image -->
+        <input type="hidden" name="image" id="image">
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const imageInput = document.getElementById('image');
+
+        // Get access to the camera
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.srcObject = stream;
+                video.play();
+            });
+        }
+
+        // Capture the photo
+        captureButton.addEventListener('click', function() {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 640, 480);
+            const imageDataURL = canvas.toDataURL('image/png');
+            imageInput.value = imageDataURL;  // Store the image data in the hidden input field
+        });
+    </script>
+</body>
+</html>

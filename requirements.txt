@@ -1,32 +1,76 @@
+absl-py==2.1.0
+astunparse==1.6.3
 bidict==0.22.1
 blinker==1.7.0
-click==8.1.7  # Latest
-dlib==19.24.2  # Latest
-face-recognition==1.3.0
-face_recognition_models==0.3.0
-Flask==3.0.1  # Latest
-Flask-SocketIO==5.3.6  # Latest
-gevent==23.9.1  # Latest
-gevent-websocket==0.10.1  # Only version provided
-greenlet==3.0.3  # Latest
-h11==0.14.0  # Only version provided
-itsdangerous==2.1.2  # Latest
-Jinja2==3.1.3  # Latest
-MarkupSafe==2.1.4  # Latest
-numpy==1.26.3  # Latest
-opencv-python-headless==4.9.0.80  # Chose headless to avoid GUI dependencies, latest version
-pandas==2.2.0  # Latest
-Pillow==10.2.0  # Latest
-python-dateutil==2.8.2  # Only version provided
-python-engineio==4.8.2  # Latest
-python-socketio==5.11.0  # Latest
-pytz==2023.4  # Latest
-simple-websocket==1.0.0  # Only version provided
-six==1.16.0  # Latest
-tzdata==2023.4  # Latest
-Werkzeug==3.0.1  # Latest
-wsproto==1.2.0  # Only version provided
-zope.event==5.0  # Only version provided
-zope.interface==6.1  # Latest
-gunicorn==20.1.0
+cachetools==5.3.2
+certifi==2024.2.2
+charset-normalizer==3.3.2
+click==8.1.7
+dlib==19.24.2
+dnspython==1.16.0
 eventlet==0.30.2
+face-recognition==1.3.0
+face-recognition-models==0.3.0
+Flask==3.0.1
+Flask-SocketIO==5.3.6
+Flask-SQLAlchemy==3.1.1
+flatbuffers==23.5.26
+gast==0.5.4
+gevent==23.9.1
+gevent-websocket==0.10.1
+google-auth==2.28.0
+google-auth-oauthlib==1.2.0
+google-pasta==0.2.0
+greenlet==3.0.3
+grpcio==1.60.1
+gunicorn==20.1.0
+h11==0.14.0
+h5py==3.10.0
+idna==3.6
+itsdangerous==2.1.2
+Jinja2==3.1.3
+keras==2.15.0
+Keras-Applications==1.0.2
+Keras-Preprocessing==1.0.1
+libclang==16.0.6
+Markdown==3.5.2
+MarkupSafe==2.1.4
+ml-dtypes==0.2.0
+numpy==1.26.3
+oauthlib==3.2.2
+opencv-python-headless==4.9.0.80
+opt-einsum==3.3.0
+packaging==23.2
+pandas==2.2.0
+pillow==10.2.0
+protobuf==4.25.3
+psycopg2-binary==2.9.9
+pyasn1==0.5.1
+pyasn1-modules==0.3.0
+python-dateutil==2.8.2
+python-dotenv==1.0.1
+python-engineio==4.8.2
+python-socketio==5.11.0
+pytz==2023.4
+PyYAML==6.0.1
+requests==2.31.0
+requests-oauthlib==1.3.1
+rsa==4.9
+scipy==1.12.0
+simple-websocket==1.0.0
+six==1.16.0
+SQLAlchemy==2.0.27
+tensorboard==2.15.2
+tensorboard-data-server==0.7.2
+tensorflow==2.15.0.post1
+tensorflow-estimator==2.15.0
+tensorflow-io-gcs-filesystem==0.36.0
+termcolor==2.4.0
+typing_extensions==4.9.0
+tzdata==2023.4
+urllib3==2.2.1
+Werkzeug==3.0.1
+wrapt==1.14.1
+wsproto==1.2.0
+zope.event==5.0
+zope.interface==6.1

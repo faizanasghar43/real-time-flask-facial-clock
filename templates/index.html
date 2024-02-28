@@ -4,48 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>ClockWise</title>
 </head>
 <body>
 <nav>
-        <img src="{{ url_for('static', filename='clock.png') }}" alt="ClockWise Logo" class="logo">
-
+    <img src="{{ url_for('static', filename='clock.png') }}" alt="ClockWise Logo" class="logo">
     <a href="/">Home</a>
     <a href="/about">About</a>
+    <a href="/face">Add Face</a>
 </nav>
 <div class="container">
     <h1 id="ClockWise">ClockWise</h1>
-    <video id="video" width="640" height="480" autoplay></video>
+    <video id="video" width="640" height="480" style="display:none;" autoplay></video>
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-    <div id="userInfo"></div>
+    <div id="userInfo">Face not recognized. Please add your face.</div>
 </div>
 
 <script>
-    navigator.permissions.query({name: 'microphone'})
-        .then((permissionObj) => {
-            console.log(permissionObj.state);
-        })
-        .catch((error) => {
-            console.log('Got error :', error);
-        })
-
-    navigator.permissions.query({name: 'camera'})
-        .then((permissionObj) => {
-            console.log(permissionObj.state);
-        })
-        .catch((error) => {
-            console.log('Got error :', error);
-        })
     let video = document.getElementById('video');
     let canvas = document.getElementById('canvas');
     let context = canvas.getContext('2d');
     let userInfoDiv = document.getElementById('userInfo');
-
-    function updateUserInfo(data) {
-        userInfoDiv.innerHTML = `Last Seen: ${data.last_seen}`
-    }
 
     navigator.mediaDevices.getUserMedia({video: true})
         .then(stream => video.srcObject = stream)
@@ -55,7 +35,7 @@
         context.drawImage(video, 0, 0, 640, 480);
         let imageDataUrl = canvas.toDataURL('image/png');
 
-        fetch('/process_frame', {
+        fetch('/compare_face', {  // Make sure this route matches your Flask route for face comparison
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -64,92 +44,14 @@
         })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
-                    updateUserInfo(data);
+                    if (data.match) {
+                    userInfoDiv.innerHTML = `Welcome back, ${data.username}. Last seen: ${data.last_seen}`;
+                } else {
+                    userInfoDiv.innerHTML = "Recognizing your face. Please wait.";
                 }
-                console.log(data);  // For debugging
             })
             .catch(error => console.error('Error sending frame.', error));
-    }, 100); // Capture frame every 100ms, adjust this value as needed
+    }, 5000); // Adjusted to capture and send frame every 5 seconds
 </script>
 </body>
 </html>
-{##}
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
-{#    <title>ClockWise</title>#}
-{#        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">#}
-{##}
-{#    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">#}
-{#</head>#}
-{#<body>#}
-{#<nav>#}
-{#    <a href="/">Home</a>#}
-{#    <a href="/about">About</a>#}
-{#</nav>#}
-{#<div class="container">#}
-{#    <h1 id="ClockWise">ClockWise</h1>#}
-{#    <video id="video" width="640" height="480" autoplay></video>#}
-{#    <canvas id="canvas" width="640" height="480"></canvas>#}
-{#    <div id="userInfo"></div>#}
-{#    <div id="clock"></div>#}
-{#</div>#}
-{##}
-{#<script>#}
-{#    let video = document.getElementById('video');#}
-{#    let canvas = document.getElementById('canvas');#}
-{#    let context = canvas.getContext('2d');#}
-{#    let userInfoDiv = document.getElementById('userInfo');#}
-{#    let clockDiv = document.getElementById('clock');#}
-{#    let faceDetected = false;#}
-{##}
-{#    function showTime() {#}
-{#        const now = new Date();#}
-{#        const hours = now.getHours().toString().padStart(2, '0');#}
-{#        const minutes = now.getMinutes().toString().padStart(2, '0');#}
-{#        const seconds = now.getSeconds().toString().padStart(2, '0');#}
-{#        clockDiv.textContent = `${hours}:${minutes}:${seconds}`;#}
-{#    }#}
-{##}
-{#    function updateUserInfo(data) {#}
-{#        userInfoDiv.innerHTML = `Last Seen: ${data.last_seen}`;#}
-{#    }#}
-{##}
-{#    navigator.mediaDevices.getUserMedia({video: true})#}
-{#        .then(stream => video.srcObject = stream)#}
-{#        .catch(error => console.error('Error accessing media devices.', error));#}
-{##}
-{#    const intervalId = setInterval(() => {#}
-{#        if (faceDetected) {#}
-{#            return;#}
-{#        }#}
-{##}
-{#        context.drawImage(video, 0, 0, 640, 480);#}
-{#        let imageDataUrl = canvas.toDataURL('image/png');#}
-{##}
-{#        fetch('/process_frame', {#}
-{#            method: 'POST',#}
-{#            headers: {#}
-{#                'Content-Type': 'application/json'#}
-{#            },#}
-{#            body: JSON.stringify({image: imageDataUrl})#}
-{#        })#}
-{#            .then(response => response.json())#}
-{#            .then(data => {#}
-{#                if (data.face_detected) {#}
-{#                    faceDetected = true;#}
-{#                    clearInterval(intervalId); // Stop sending frames#}
-{#                    video.style.display = 'none'; // Optionally hide the video element#}
-{#                    clockDiv.style.display = 'block'; // Show the clock#}
-{#                    setInterval(showTime, 1000); // Update the clock every second#}
-{#                }#}
-{#                console.log(data); // For debugging#}
-{#            })#}
-{#            .catch(error => console.error('Error sending frame.', error));#}
-{#    }, 100); // Capture frame every 100ms#}
-{#</script>#}
-{#</body>#}
-{#</html>#}

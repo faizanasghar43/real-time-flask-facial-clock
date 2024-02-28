@@ -1,88 +1,35 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+import os
+import numpy as np
 import face_recognition
 import cv2
-import pandas as pd
-import numpy as np
-import os
-import datetime
 import base64
 import io
+from PIL import Image
 
 app = Flask(__name__)
-
-csv_file = 'known_faces.csv'
-df = pd.read_csv(csv_file) if os.path.exists(csv_file) else pd.DataFrame(
-    columns=['username', 'face_encoding', 'last_seen'])
-
-MATCH_THRESHOLD = 0.5
-visible_faces = set()
-last_new_face_time = None
-NEW_FACE_COOLDOWN = 5
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://",
+                                                                               1)  # Fix for Heroku's database URL scheme
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 
-def save_known_faces(df):
-    df.to_csv(csv_file, index=False)
+# Model for storing known faces
+class KnownFace(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    face_encoding = db.Column(db.PickleType, nullable=False)
+    last_seen = db.Column(db.DateTime, nullable=False)
+
+    def __repr__(self):
+        return f'<KnownFace {self.username}>'
 
 
-@app.route('/process_frame', methods=['POST'])
-def process_frame():
-    global df, visible_faces, last_new_face_time
-
-    data = request.json
-    image_data = data['image']
-    image_data = image_data.split(",")[1]
-    image_bytes = io.BytesIO(base64.b64decode(image_data))
-    image = cv2.imdecode(np.frombuffer(image_bytes.read(), np.uint8), cv2.IMREAD_COLOR)
-
-    face_locations = face_recognition.face_locations(image)
-    face_encodings = face_recognition.face_encodings(image, face_locations)
-    current_visible_faces = set()
-
-    for face_encoding, face_location in zip(face_encodings, face_locations):
-        if not df.empty:
-            face_encodings_as_arrays = [np.array(eval(encoding)) for encoding in df['face_encoding'].tolist()]
-            distances = face_recognition.face_distance(face_encodings_as_arrays, face_encoding)
-            best_match_index = np.argmin(distances) if len(distances) > 0 else None
-
-            if best_match_index is not None and distances[best_match_index] <= MATCH_THRESHOLD:
-                username = df.at[best_match_index, 'username']
-                current_visible_faces.add(username)
-
-                if username not in visible_faces:
-                    current_time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    df.at[best_match_index, 'last_seen'] = current_time_str
-                    save_known_faces(df)
-
-            else:
-                current_time = datetime.datetime.now()
-                if last_new_face_time is None or (
-                        current_time - last_new_face_time).total_seconds() > NEW_FACE_COOLDOWN:
-                    new_face_id = f"face_{len(df) + 1}"
-                    current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S')
-                    new_row = pd.DataFrame(
-                        {'username': [new_face_id], 'face_encoding': [str(face_encoding.tolist())],
-                         'last_seen': [current_time_str]})
-                    df = pd.concat([df, new_row], ignore_index=True)
-                    save_known_faces(df)
-                    last_new_face_time = current_time
-        else:
-            new_face_id = f"face_1"
-            current_time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            df = pd.DataFrame({'username': [new_face_id], 'face_encoding': [str(face_encoding.tolist())],
-                               'last_seen': [current_time_str]})
-            save_known_faces(df)
-
-    faces_no_longer_visible = visible_faces - current_visible_faces
-    for username in faces_no_longer_visible:
-        best_match_index = df[df['username'] == username].index[0]
-        current_time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        df.at[best_match_index, 'last_seen'] = current_time_str
-        save_known_faces(df)
-
-    visible_faces = current_visible_faces
-
-    return jsonify({'status': 'success',
-                    'last_seen': last_new_face_time})
+@app.before_request
+def create_tables():
+    db.create_all()
 
 
 @app.route('/')
@@ -90,10 +37,132 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/face', methods=['GET', 'POST'])
+def add_face():
+    if request.method == 'POST':
+        username = request.form['username']
+        image_file = request.files['image_file']
+        image = face_recognition.load_image_file(image_file)
+        face_encodings = face_recognition.face_encodings(image)
+
+        if face_encodings:
+            add_or_update_face(username, face_encodings[0])
+            return jsonify({'status': 'success', 'username': username})
+        else:
+            return jsonify({'status': 'error', 'message': 'No faces found in the image.'})
+    return render_template('add_face.html')
+
+
+#
+# @app.route('/compare_face', methods=['POST'])
+# def compare_face():
+#     image_file = request.files['image_file']
+#     image = face_recognition.load_image_file(image_file)
+#     uploaded_face_encodings = face_recognition.face_encodings(image)
+#
+#     if uploaded_face_encodings:
+#         uploaded_face_encoding = uploaded_face_encodings[0]
+#         known_faces = KnownFace.query.all()
+#         known_face_encodings = [face.face_encoding for face in known_faces]
+#         known_face_usernames = [face.username for face in known_faces]
+#
+#         distances = face_recognition.face_distance(known_face_encodings, uploaded_face_encoding)
+#         best_match_index = np.argmin(distances) if len(distances) > 0 else None
+#
+#         if best_match_index is not None and distances[best_match_index] <= 0.5:
+#             return jsonify({
+#                 'status': 'success',
+#                 'match': True,
+#                 'username': known_face_usernames[best_match_index],
+#                 'distance': str(distances[best_match_index])
+#             })
+#         else:
+#             return jsonify({'status': 'success', 'match': False})
+#     return jsonify({'status': 'error', 'message': 'No faces found in the uploaded image.'})
+@app.route('/compare_face', methods=['POST'])
+def compare_face():
+    data = request.get_json()
+    if 'image' not in data:
+        return jsonify({'status': 'error', 'message': 'Image data missing.'}), 400
+
+    image_data = data['image'].split(",")[1]
+    image_bytes = io.BytesIO(base64.b64decode(image_data))
+    image = Image.open(image_bytes)
+    image_array = np.array(image.convert('RGB'))
+
+    # Attempt to find faces in the image
+    face_locations = face_recognition.face_locations(image_array)
+    face_encodings = face_recognition.face_encodings(image_array, face_locations)
+
+    if face_encodings:
+        # Iterate over each face found in the image
+        for face_encoding in face_encodings:
+            # Attempt to match each face encoding to known faces
+            matches = face_recognition.compare_faces([face.face_encoding for face in KnownFace.query.all()],
+                                                     face_encoding)
+            face_distances = face_recognition.face_distance([face.face_encoding for face in KnownFace.query.all()],
+                                                            face_encoding)
+            best_match_index = np.argmin(face_distances) if len(face_distances) > 0 else None
+
+            if best_match_index is not None and matches[best_match_index]:
+                # A match was found, update last_seen
+                known_face = KnownFace.query.all()[best_match_index]
+                known_face.last_seen = datetime.utcnow()
+                db.session.commit()
+                return jsonify({'status': 'success', 'match': True, 'username': known_face.username,
+                                'last_seen': known_face.last_seen.isoformat()})
+            else:
+                # No match found
+                return jsonify({'status': 'success', 'match': False,
+                                'message': 'Your face is not recognized. Please add your face.'})
+    else:
+        # No faces found in the image
+        return jsonify({'status': 'error', 'message': 'No faces found in the submitted image.'})
+
+
+def add_or_update_face(username, face_encoding):
+    known_face = KnownFace.query.filter_by(username=username).first()
+    if known_face is None:
+        known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=datetime.now())
+        db.session.add(known_face)
+    else:
+        known_face.face_encoding = face_encoding
+        known_face.last_seen = datetime.now()
+    db.session.commit()
+
+
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 
+@app.route('/add_info', methods=['GET', 'POST'])
+def add_info():
+    if request.method == 'POST':
+        username = request.form['username']
+        # Assuming the image is sent as a Base64-encoded string in a hidden input field named 'image'
+        image_data = request.form.get('image')
+
+        # Decode the Base64 image
+        if image_data:
+            image_data = image_data.split(",")[1]  # Remove the Base64 header if present
+            image_bytes = base64.b64decode(image_data)
+            image = face_recognition.load_image_file(io.BytesIO(image_bytes))
+            face_encodings = face_recognition.face_encodings(image)
+
+            if face_encodings:
+                # Only consider the first face found in the image for this example
+                face_encoding = face_encodings[0]
+                add_or_update_face(username, face_encoding)
+                return jsonify({'status': 'success', 'message': 'Face added/updated successfully.'})
+            else:
+                return jsonify({'status': 'error', 'message': 'No faces found in the submitted image.'})
+        else:
+            return jsonify({'status': 'error', 'message': 'No image data provided.'})
+
+    # Render a form for GET request
+    return render_template('add_face.html')
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=True)
+    app.run(debug=True)
