@@ -53,32 +53,6 @@ def add_face():
     return render_template('add_face.html')
 
 
-#
-# @app.route('/compare_face', methods=['POST'])
-# def compare_face():
-#     image_file = request.files['image_file']
-#     image = face_recognition.load_image_file(image_file)
-#     uploaded_face_encodings = face_recognition.face_encodings(image)
-#
-#     if uploaded_face_encodings:
-#         uploaded_face_encoding = uploaded_face_encodings[0]
-#         known_faces = KnownFace.query.all()
-#         known_face_encodings = [face.face_encoding for face in known_faces]
-#         known_face_usernames = [face.username for face in known_faces]
-#
-#         distances = face_recognition.face_distance(known_face_encodings, uploaded_face_encoding)
-#         best_match_index = np.argmin(distances) if len(distances) > 0 else None
-#
-#         if best_match_index is not None and distances[best_match_index] <= 0.5:
-#             return jsonify({
-#                 'status': 'success',
-#                 'match': True,
-#                 'username': known_face_usernames[best_match_index],
-#                 'distance': str(distances[best_match_index])
-#             })
-#         else:
-#             return jsonify({'status': 'success', 'match': False})
-#     return jsonify({'status': 'error', 'message': 'No faces found in the uploaded image.'})
 @app.route('/compare_face', methods=['POST'])
 def compare_face():
     data = request.get_json()
