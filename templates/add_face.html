@@ -1,3 +1,59 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">#}
+{#    <link rel="stylesheet" href="/static/styles.css">#}
+{#    <title>Add User</title>#}
+{#    <style>#}
+{#        video {#}
+{#            width: 100%;#}
+{#            max-width: 400px;#}
+{#        }#}
+{#        canvas {#}
+{#            display: none;#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{#    <h1 class="h1">Welcome to clockwise, please add your name and face</h1>#}
+{#    <form method="post" action="/add_info" enctype="multipart/form-data">#}
+{#        <input type="text" name="username" placeholder="Enter your username" required>#}
+{#        <br><br>#}
+{#        <video id="video" playsinline autoplay></video>#}
+{#        <button type="button" id="capture">Capture Photo</button>#}
+{#        <canvas id="canvas" width="640" height="480"></canvas>#}
+{#        <!-- This input field is used to submit the base64 encoded image -->#}
+{#        <input type="hidden" name="image" id="image">#}
+{#        <br><br>#}
+{#        <input type="submit" value="Submit">#}
+{#    </form>#}
+{##}
+{#    <script>#}
+{#        const video = document.getElementById('video');#}
+{#        const canvas = document.getElementById('canvas');#}
+{#        const captureButton = document.getElementById('capture');#}
+{#        const imageInput = document.getElementById('image');#}
+{##}
+{#        // Get access to the camera#}
+{#        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {#}
+{#            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {#}
+{#                video.srcObject = stream;#}
+{#                video.play();#}
+{#            });#}
+{#        }#}
+{##}
+{#        // Capture the photo#}
+{#        captureButton.addEventListener('click', function() {#}
+{#            const context = canvas.getContext('2d');#}
+{#            context.drawImage(video, 0, 0, 640, 480);#}
+{#            const imageDataURL = canvas.toDataURL('image/png');#}
+{#            imageInput.value = imageDataURL;  // Store the image data in the hidden input field#}
+{#        });#}
+{#    </script>#}
+{#</body>#}
+{#</html>#}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,24 +63,32 @@
     <link rel="stylesheet" href="/static/styles.css">
     <title>Add User</title>
     <style>
-        video {
+        video, #capture {
+            display: none; /* Initially hide video and capture button */
             width: 100%;
             max-width: 400px;
         }
         canvas {
-            display: none;
+            display: none; /* Hide canvas initially */
         }
     </style>
 </head>
+
 <body>
-    <h1 class="h1">Welcome to clockwise, please add your name and face</h1>
+<nav>
+    <img src="{{ url_for('static', filename='clock.png') }}" alt="ClockWise Logo" class="logo">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/face">Add Face</a>
+</nav>
+    <h1 id="title-statement">Clockwise</h1>
+
     <form method="post" action="/add_info" enctype="multipart/form-data">
-        <input type="text" name="username" placeholder="Enter your username" required>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
         <br><br>
         <video id="video" playsinline autoplay></video>
         <button type="button" id="capture">Capture Photo</button>
         <canvas id="canvas" width="640" height="480"></canvas>
-        <!-- This input field is used to submit the base64 encoded image -->
         <input type="hidden" name="image" id="image">
         <br><br>
         <input type="submit" value="Submit">
@@ -35,9 +99,21 @@
         const canvas = document.getElementById('canvas');
         const captureButton = document.getElementById('capture');
         const imageInput = document.getElementById('image');
+        const usernameInput = document.getElementById('username');
+
+        usernameInput.addEventListener('input', () => {
+            const username = usernameInput.value.trim();
+            if (username) { // If there is a username, show video and capture button
+                video.style.display = 'block';
+                captureButton.style.display = 'inline-block';
+            } else { // Otherwise, hide them
+                video.style.display = 'none';
+                captureButton.style.display = 'none';
+            }
+        });
 
         // Get access to the camera
-        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
                 video.srcObject = stream;
                 video.play();
@@ -47,10 +123,110 @@
         // Capture the photo
         captureButton.addEventListener('click', function() {
             const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, 640, 480);
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.style.display = 'block'; // Show the canvas after capturing the photo
             const imageDataURL = canvas.toDataURL('image/png');
-            imageInput.value = imageDataURL;  // Store the image data in the hidden input field
+            imageInput.value = imageDataURL; // Store the image data in the hidden input field
         });
+            document.addEventListener('DOMContentLoaded', function() {
+    const titles = [
+        "ClockWise: A Clock That Mimics Human Memory",
+        "ClockWise: Keeping You On Your Toes, One Glance at a Time",
+        "ClockWise: Time Remembered, Moments Forgotten: The Clock That Echoes Human Memory"
+    ];
+    let currentIndex = 0;
+
+    const pageTitle = document.getElementById('title-statement'); // Assuming you have an element with id="ClockWise"
+
+    setInterval(() => {
+        pageTitle.textContent = titles[currentIndex]; // Update the title text
+        currentIndex = (currentIndex + 1) % titles.length; // Move to the next title, loop back to the first after the last
+    }, 4000); // Change title every 4000 milliseconds (4 seconds)
+});
+
     </script>
 </body>
 </html>
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">#}
+{#    <title>ClockWise</title>#}
+{#</head>#}
+{#<body>#}
+{#<nav>#}
+{#    <img src="{{ url_for('static', filename='clock.png') }}" alt="ClockWise Logo" class="logo">#}
+{#    <a href="/">Home</a>#}
+{#    <a href="/about">About</a>#}
+{#    <a href="/face">Add Face</a>#}
+{#</nav>#}
+{#<div class="container">#}
+{#    <h1 id="ClockWise">ClockWise</h1>#}
+{#    <button id="beginCapture">Begin Capture</button>#}
+{#    <div id="countdown" style="font-size: 20px; display: none;"></div>#}
+{#    <video id="video" width="640" height="480" style="display:none;" autoplay></video>#}
+{#    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>#}
+{#    <div id="userInfo">Face not recognized. Please add your face.</div>#}
+{#</div>#}
+{##}
+{#<script>#}
+{#    let video = document.getElementById('video');#}
+{#    let canvas = document.getElementById('canvas');#}
+{#    let context = canvas.getContext('2d');#}
+{#    let userInfoDiv = document.getElementById('userInfo');#}
+{#    let beginCaptureButton = document.getElementById('beginCapture');#}
+{#    let countdownDiv = document.getElementById('countdown');#}
+{##}
+{#    navigator.mediaDevices.getUserMedia({video: true})#}
+{#        .then(stream => {#}
+{#            video.srcObject = stream;#}
+{#        })#}
+{#        .catch(error => {#}
+{#            console.error('Error accessing media devices.', error);#}
+{#        });#}
+{##}
+{#    beginCaptureButton.onclick = function() {#}
+{#        video.style.display = 'block'; // Show the video element#}
+{#        countdownDiv.style.display = 'block'; // Show the countdown#}
+{#        let countdown = 3; // Set countdown duration#}
+{#        countdownDiv.innerText = countdown; // Display initial countdown value#}
+{##}
+{#        let countdownInterval = setInterval(() => {#}
+{#            countdown--;#}
+{#            countdownDiv.innerText = countdown;#}
+{#            if (countdown <= 0) {#}
+{#                clearInterval(countdownInterval); // Stop the countdown#}
+{#                countdownDiv.style.display = 'none'; // Hide the countdown#}
+{#                context.drawImage(video, 0, 0, 640, 480);#}
+{#                let imageDataUrl = canvas.toDataURL('image/png');#}
+{#                video.style.display = 'none'; // Optionally hide the video element again#}
+{##}
+{#                fetch('/compare_face', {  // Make sure this route matches your Flask route for face comparison#}
+{#                    method: 'POST',#}
+{#                    headers: {#}
+{#                        'Content-Type': 'application/json'#}
+{#                    },#}
+{#                    body: JSON.stringify({image: imageDataUrl})#}
+{#                })#}
+{#                .then(response => response.json())#}
+{#                .then(data => {#}
+{#                    if (data.match) {#}
+{#                        userInfoDiv.innerHTML = `Welcome back, ${data.username}. Last seen: ${data.last_seen}`;#}
+{#                    } else {#}
+{#                        userInfoDiv.innerHTML = "Recognizing your face. Please wait.";#}
+{#                    }#}
+{#                })#}
+{#                .catch(error => {#}
+{#                    console.error('Error sending frame.', error);#}
+{#                });#}
+{#            }#}
+{#        }, 1000); // Countdown updates every second#}
+{#    };#}
+{#</script>#}
+{#</body>#}
+{#</html>#}

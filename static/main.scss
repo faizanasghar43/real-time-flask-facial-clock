@@ -1,0 +1,152 @@
+@import 'flipclock';
+
+@font-face {
+    font-family: 'ClockWork';
+    src: url('/static/fonts/ClockWork.ttf') format('truetype');
+    font-display: swap; /* This will swap the font once it's loaded */
+}
+
+@font-face {
+    font-family: 'AtomicClockRadio';
+    src: url('/static/fonts/AtomicClockRadio.ttf') format('truetype');
+    font-display: swap; /* This will swap the font once it's loaded */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+}
+
+.container {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #FFFFFF;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+#ClockWise{
+    font-family: 'ClockWork', sans-serif;
+    font-size:4em !important;
+}
+#dateDisplay, #userInfo{
+    font-family: 'AtomicClockRadio', sans-serif;
+    margin: inherit;
+}
+h1, h2 {
+    color: #D32F2F;
+}
+
+p, a {
+    font-size: 16px;
+}
+
+a {
+    color: #0066CC;
+}
+
+/* Custom styles for face capture functionality */
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px; /* Adjust based on your layout */
+    margin: 20px auto; /* Centering the video container */
+}
+
+#video {
+    width: 100%;
+    border-radius: 8px;
+    display: block; /* Show the video stream */
+}
+
+#capture {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background-color: #D32F2F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#capture:hover {
+    background-color: #B71C1C;
+}
+
+/* Hide the canvas element by default */
+#canvas {
+    display: none;
+}
+
+/* Additional styles */
+input[type="text"] {
+    width: calc(100% - 22px); /* Full width with padding adjustment */
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.logo {
+    height: 50px;
+    margin-right: auto;
+    mix-blend-mode: multiply;
+}
+.clock {
+    font-family: 'Roboto Condensed', sans-serif !important;
+}
+#captureBtn { /* Updated from #capture to #captureBtn for consistency */
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background-color: #D32F2F; /* Bootstrap primary blue */
+    color: white;
+    font-weight: bold; /* Make the text bold */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+#captureBtn:hover {
+    background-color: #0056b3; /* A darker shade of blue for hover state */
+}

@@ -8,12 +8,32 @@ import cv2
 import base64
 import io
 from PIL import Image
+from flask_assets import Environment, Bundle
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://",
-                                                                               1)  # Fix for Heroku's database URL scheme
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+assets = Environment(app)
+
+# create bundle for Flask-Assets to compile and prefix scss to css
+scss_bundle = Bundle(
+    'main.scss',  # Path to your main SCSS file
+    filters='libsass',  # Use libsass to compile SCSS to CSS
+    output='styles.css',  # Output path for the compiled CSS
+    depends=('*.scss')  # Ensure changes in any SCSS files trigger a recompile
+)
+
+# Register and build the bundle
+assets.register('scss_all', scss_bundle)
+scss_bundle.build()
+# css = Bundle('flipclock.scss',
+#              filters=['libsass'],
+#              output='styles.css',
+#              depends='*.scss')
+#
+# assets.register("asset_css", css)
+# css.build()
 
 
 # Model for storing known faces
@@ -27,9 +47,11 @@ class KnownFace(db.Model):
         return f'<KnownFace {self.username}>'
 
 
-@app.before_request
-def create_tables():
-    db.create_all()
+#
+#
+# @app.before_request
+# def create_tables():
+#     db.create_all()
 
 
 @app.route('/')
@@ -83,13 +105,19 @@ def compare_face():
                 known_face = KnownFace.query.all()[best_match_index]
                 known_face.last_seen = datetime.utcnow()
                 db.session.commit()
+                print({'status': 'success', 'match': True, 'username': known_face.username,
+                       'last_seen': known_face.last_seen.isoformat()})
                 return jsonify({'status': 'success', 'match': True, 'username': known_face.username,
                                 'last_seen': known_face.last_seen.isoformat()})
+
             else:
                 # No match found
+                print({'status': 'success', 'match': False,
+                       'message': 'Your face is not recognized. Please add your face.'})
                 return jsonify({'status': 'success', 'match': False,
                                 'message': 'Your face is not recognized. Please add your face.'})
     else:
+        print({'status': 'error', 'message': 'No faces found in the submitted image.'})
         # No faces found in the image
         return jsonify({'status': 'error', 'message': 'No faces found in the submitted image.'})
 

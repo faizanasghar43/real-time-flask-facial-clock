@@ -1,0 +1,231 @@
+@mixin card-transforms($total){
+  @for $i from 0 through $total {
+      @if $i < $total {
+        .card-#{$i} {
+          transform: rotateX(-180deg);
+          z-index:-1;
+        }
+      } @else {
+        .card-#{$i} {
+          transform: rotateX(-180deg);
+          z-index:10;
+        }
+      }
+    }
+}
+
+
+html,
+body {
+  height: 100%;
+  position: relative;
+}
+
+body {
+  background: #121212;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clock {
+  perspective: 600px;
+  position: relative;
+  min-width:780px;
+}
+
+.hours,
+.minutes {
+  width:260px;
+  position: relative;
+  float:left;
+  &:before,
+  &:after {
+    content:'';
+    display: block;
+    width:10px;
+    height:10px;
+    background:#fff;
+    border-radius: 100%;
+    position: absolute;
+    animation: pulse 1s infinite;
+  }
+  &:before {
+    top:calc(50% - 10px);
+    right:10px;
+  }
+  &:after {
+    top:calc(50% + 10px);
+    right:10px;
+  }
+}
+
+.seconds {
+  width:260px;
+  position: relative;
+  float:left;
+}
+
+.digit {
+  width: 110px;
+  height: 160px;
+  position: relative;
+  float:left;
+  padding:0 5px;
+
+  .card {
+    width: 110px;
+    height: 80px;
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    transform-origin: 50% 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition:all ease 1000ms;
+
+    @for $j from 1 through 10 {
+      &:nth-of-type(#{$j}){
+        z-index: (11 - $j);
+      }
+    }
+
+  }
+  .face {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110px;
+    height: 80px;
+    overflow: hidden;
+    p {
+      backface-visibility: hidden;
+      color: #fff;
+      font-size: 180px;
+      font-weight: bold;
+      position: absolute;
+      line-height: 200px;
+      padding:0 10px;
+      margin: 0;
+      left: 0;
+      text-shadow:0 0 5px #424242;
+    }
+  }
+  .front {
+    background: linear-gradient(0deg,#323232 40%, #424242 );
+    border-radius: 6px 6px 0 0;
+    z-index: 2;
+    transform: rotateX(0deg);
+    p {
+      top: -15px;
+    }
+    &:after {
+      content:'';
+      display: block;
+      position: absolute;
+      top:0;
+      left: 0;
+      width:100%;
+      height:100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 98%, rgba(0,0,0,0.3) );
+    }
+  }
+  .back {
+    background: linear-gradient(-170deg, #323232 55%, #212121 );
+    border-radius: 0 0 6px 6px;
+    transform: rotateX(180deg);
+    p {
+      top: -95px;
+    }
+    &:after {
+      content:'';
+      display: block;
+      position: absolute;
+      top:0;
+      left: 0;
+      width:100%;
+      height:100%;
+      background: linear-gradient(7deg, rgba(0,0,0,0) 65%, rgba(0,0,0,0.15) );
+    }
+  }
+
+
+  &.zero {
+    @include card-transforms(0);
+  }
+  &.one {
+    @include card-transforms(1);
+  }
+  &.two {
+    @include card-transforms(2);
+  }
+  &.three {
+    @include card-transforms(3);
+  }
+  &.four {
+    @include card-transforms(4);
+  }
+  &.five {
+    @include card-transforms(5);
+  }
+  &.six {
+    @include card-transforms(6);
+  }
+  &.seven {
+    @include card-transforms(7);
+  }
+  &.eight {
+   @include card-transforms(8);
+  }
+  &.nine {
+    @include card-transforms(9);
+  }
+}
+
+@keyframes pulse{
+  0%,100% {background:rgba(255,255,255,.3);}
+  50% {background:rgba(255,255,255,.1);}
+}
+
+@media screen and (max-width:800px){
+  .clock {
+    min-width:400px;
+  }
+
+  .hours,
+  .minutes,
+  .seconds {
+    width:200px;
+  }
+
+  .digit {
+    width:80px;
+    height:130px;
+    .card {
+      width:80px;
+      height:65px;
+      .face{
+        width:80px;
+        height:65px;
+        p{
+          font-size:160px;
+          padding:0;
+        }
+      }
+      .front {
+        p {
+          top:-30px;
+        }
+      }
+    }
+  }
+}
+
