@@ -9,7 +9,7 @@ import base64
 import io
 from PIL import Image
 from flask_assets import Environment, Bundle
-
+import pytz
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -21,19 +21,12 @@ scss_bundle = Bundle(
     'main.scss',  # Path to your main SCSS file
     filters='libsass',  # Use libsass to compile SCSS to CSS
     output='styles.css',  # Output path for the compiled CSS
-    depends=('*.scss')  # Ensure changes in any SCSS files trigger a recompile
+    depends='*.scss'  # Ensure changes in any SCSS files trigger a recompile
 )
 
 # Register and build the bundle
 assets.register('scss_all', scss_bundle)
 scss_bundle.build()
-# css = Bundle('flipclock.scss',
-#              filters=['libsass'],
-#              output='styles.css',
-#              depends='*.scss')
-#
-# assets.register("asset_css", css)
-# css.build()
 
 
 # Model for storing known faces
@@ -123,9 +116,12 @@ def compare_face():
 
 
 def add_or_update_face(username, face_encoding):
+    eastern = pytz.timezone('US/Eastern')
+    # Get the current time in EST
+    # now_in_eastern = datetime.now(eastern)
     known_face = KnownFace.query.filter_by(username=username).first()
     if known_face is None:
-        known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=datetime.now())
+        known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=datetime.now(eastern))
         db.session.add(known_face)
     else:
         known_face.face_encoding = face_encoding
@@ -142,7 +138,6 @@ def about():
 def add_info():
     if request.method == 'POST':
         username = request.form['username']
-        # Assuming the image is sent as a Base64-encoded string in a hidden input field named 'image'
         image_data = request.form.get('image')
 
         # Decode the Base64 image
