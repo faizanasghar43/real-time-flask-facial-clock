@@ -61,8 +61,8 @@ def add_face():
         face_encodings = face_recognition.face_encodings(image)
 
         if face_encodings:
-            add_or_update_face(username, face_encodings[0])
-            return jsonify({'status': 'success', 'username': username})
+            message = add_or_update_face(username, face_encodings[0])
+            return jsonify({'status': 'success', 'message': message})
         else:
             return jsonify({'status': 'error', 'message': 'No faces found in the image.'})
     return render_template('add_face.html')
@@ -115,19 +115,36 @@ def compare_face():
         return jsonify({'status': 'error', 'message': 'No faces found in the submitted image.'})
 
 
+# def add_or_update_face(username, face_encoding):
+#     eastern = pytz.timezone('US/Eastern')
+#     # Get the current time in EST
+#     # now_in_eastern = datetime.now(eastern)
+#     known_face = KnownFace.query.filter_by(username=username).first()
+#     if known_face is None:
+#         known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=datetime.now(eastern))
+#         db.session.add(known_face)
+#     else:
+#         known_face.face_encoding = face_encoding
+#         known_face.last_seen = datetime.now()
+#     db.session.commit()
 def add_or_update_face(username, face_encoding):
     eastern = pytz.timezone('US/Eastern')
-    # Get the current time in EST
-    # now_in_eastern = datetime.now(eastern)
-    known_face = KnownFace.query.filter_by(username=username).first()
-    if known_face is None:
-        known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=datetime.now(eastern))
-        db.session.add(known_face)
-    else:
-        known_face.face_encoding = face_encoding
-        known_face.last_seen = datetime.now()
-    db.session.commit()
+    now_in_eastern = datetime.now(eastern)
 
+    known_face = KnownFace.query.filter_by(username=username).first()
+    if known_face:
+        # If the face is already in the database, update the last seen and face encoding
+        known_face.face_encoding = face_encoding
+        known_face.last_seen = now_in_eastern
+        message = "Your face is already there. Information updated."
+    else:
+        # If the face is not in the database, add it
+        known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=now_in_eastern)
+        db.session.add(known_face)
+        message = "New face added successfully."
+
+    db.session.commit()
+    return message
 
 @app.route('/about')
 def about():
