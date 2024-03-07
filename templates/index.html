@@ -4,152 +4,805 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% assets "asset_css" %}
+  <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"/>
+{% endassets %}
     <title>ClockWise</title>
 </head>
 <body>
 <nav>
-        <img src="{{ url_for('static', filename='clock.png') }}" alt="ClockWise Logo" class="logo">
-
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="ClockWise Logo" class="logo"> <!-- Update this path to your image file -->
     <a href="/">Home</a>
     <a href="/about">About</a>
+    <a href="/face">Add Face</a>
 </nav>
 <div class="container">
     <h1 id="ClockWise">ClockWise</h1>
-    <video id="video" width="640" height="480" autoplay></video>
+    <div class="wrapper">
+    <div class="clock">
+        <div class="hours">
+            <div class="digit zero">
+                <div class="card card-0">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+                <div class="card card-1">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>1</p>
+                    </div>
+                </div>
+                <div class="card card-2">
+                    <div class="face front">
+                        <p>1</p>
+                    </div>
+                    <div class="face back">
+                        <p>2</p>
+                    </div>
+                </div>
+                <div class="card card-3">
+                    <div class="face front">
+                        <p>2</p>
+                    </div>
+                    <div class="face back">
+                        <p>3</p>
+                    </div>
+                </div>
+                <div class="card card-4">
+                    <div class="face front">
+                        <p>3</p>
+                    </div>
+                    <div class="face back">
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="card card-5">
+                    <div class="face front">
+                        <p>4</p>
+                    </div>
+                    <div class="face back">
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="card card-6">
+                    <div class="face front">
+                        <p>5</p>
+                    </div>
+                    <div class="face back">
+                        <p>6</p>
+                    </div>
+                </div>
+                <div class="card card-7">
+                    <div class="face front">
+                        <p>6</p>
+                    </div>
+                    <div class="face back">
+                        <p>7</p>
+                    </div>
+                </div>
+                <div class="card card-8">
+                    <div class="face front">
+                        <p>7</p>
+                    </div>
+                    <div class="face back">
+                        <p>8</p>
+                    </div>
+                </div>
+                <div class="card card-9">
+                    <div class="face front">
+                        <p>8</p>
+                    </div>
+                    <div class="face back">
+                        <p>9</p>
+                    </div>
+                </div>
+                <div class="card card-10">
+                    <div class="face front">
+                        <p>9</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="digit zero">
+                <div class="card card-0">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+                <div class="card card-1">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>1</p>
+                    </div>
+                </div>
+                <div class="card card-2">
+                    <div class="face front">
+                        <p>1</p>
+                    </div>
+                    <div class="face back">
+                        <p>2</p>
+                    </div>
+                </div>
+                <div class="card card-3">
+                    <div class="face front">
+                        <p>2</p>
+                    </div>
+                    <div class="face back">
+                        <p>3</p>
+                    </div>
+                </div>
+                <div class="card card-4">
+                    <div class="face front">
+                        <p>3</p>
+                    </div>
+                    <div class="face back">
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="card card-5">
+                    <div class="face front">
+                        <p>4</p>
+                    </div>
+                    <div class="face back">
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="card card-6">
+                    <div class="face front">
+                        <p>5</p>
+                    </div>
+                    <div class="face back">
+                        <p>6</p>
+                    </div>
+                </div>
+                <div class="card card-7">
+                    <div class="face front">
+                        <p>6</p>
+                    </div>
+                    <div class="face back">
+                        <p>7</p>
+                    </div>
+                </div>
+                <div class="card card-8">
+                    <div class="face front">
+                        <p>7</p>
+                    </div>
+                    <div class="face back">
+                        <p>8</p>
+                    </div>
+                </div>
+                <div class="card card-9">
+                    <div class="face front">
+                        <p>8</p>
+                    </div>
+                    <div class="face back">
+                        <p>9</p>
+                    </div>
+                </div>
+                <div class="card card-10">
+                    <div class="face front">
+                        <p>9</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="minutes">
+            <div class="digit zero">
+                <div class="card card-0">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+                <div class="card card-1">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>1</p>
+                    </div>
+                </div>
+                <div class="card card-2">
+                    <div class="face front">
+                        <p>1</p>
+                    </div>
+                    <div class="face back">
+                        <p>2</p>
+                    </div>
+                </div>
+                <div class="card card-3">
+                    <div class="face front">
+                        <p>2</p>
+                    </div>
+                    <div class="face back">
+                        <p>3</p>
+                    </div>
+                </div>
+                <div class="card card-4">
+                    <div class="face front">
+                        <p>3</p>
+                    </div>
+                    <div class="face back">
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="card card-5">
+                    <div class="face front">
+                        <p>4</p>
+                    </div>
+                    <div class="face back">
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="card card-6">
+                    <div class="face front">
+                        <p>5</p>
+                    </div>
+                    <div class="face back">
+                        <p>6</p>
+                    </div>
+                </div>
+                <div class="card card-7">
+                    <div class="face front">
+                        <p>6</p>
+                    </div>
+                    <div class="face back">
+                        <p>7</p>
+                    </div>
+                </div>
+                <div class="card card-8">
+                    <div class="face front">
+                        <p>7</p>
+                    </div>
+                    <div class="face back">
+                        <p>8</p>
+                    </div>
+                </div>
+                <div class="card card-9">
+                    <div class="face front">
+                        <p>8</p>
+                    </div>
+                    <div class="face back">
+                        <p>9</p>
+                    </div>
+                </div>
+                <div class="card card-10">
+                    <div class="face front">
+                        <p>9</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="digit zero">
+                <div class="card card-0">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+                <div class="card card-1">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>1</p>
+                    </div>
+                </div>
+                <div class="card card-2">
+                    <div class="face front">
+                        <p>1</p>
+                    </div>
+                    <div class="face back">
+                        <p>2</p>
+                    </div>
+                </div>
+                <div class="card card-3">
+                    <div class="face front">
+                        <p>2</p>
+                    </div>
+                    <div class="face back">
+                        <p>3</p>
+                    </div>
+                </div>
+                <div class="card card-4">
+                    <div class="face front">
+                        <p>3</p>
+                    </div>
+                    <div class="face back">
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="card card-5">
+                    <div class="face front">
+                        <p>4</p>
+                    </div>
+                    <div class="face back">
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="card card-6">
+                    <div class="face front">
+                        <p>5</p>
+                    </div>
+                    <div class="face back">
+                        <p>6</p>
+                    </div>
+                </div>
+                <div class="card card-7">
+                    <div class="face front">
+                        <p>6</p>
+                    </div>
+                    <div class="face back">
+                        <p>7</p>
+                    </div>
+                </div>
+                <div class="card card-8">
+                    <div class="face front">
+                        <p>7</p>
+                    </div>
+                    <div class="face back">
+                        <p>8</p>
+                    </div>
+                </div>
+                <div class="card card-9">
+                    <div class="face front">
+                        <p>8</p>
+                    </div>
+                    <div class="face back">
+                        <p>9</p>
+                    </div>
+                </div>
+                <div class="card card-10">
+                    <div class="face front">
+                        <p>9</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="seconds">
+            <div class="digit zero">
+                <div class="card card-0">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+                <div class="card card-1">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>1</p>
+                    </div>
+                </div>
+                <div class="card card-2">
+                    <div class="face front">
+                        <p>1</p>
+                    </div>
+                    <div class="face back">
+                        <p>2</p>
+                    </div>
+                </div>
+                <div class="card card-3">
+                    <div class="face front">
+                        <p>2</p>
+                    </div>
+                    <div class="face back">
+                        <p>3</p>
+                    </div>
+                </div>
+                <div class="card card-4">
+                    <div class="face front">
+                        <p>3</p>
+                    </div>
+                    <div class="face back">
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="card card-5">
+                    <div class="face front">
+                        <p>4</p>
+                    </div>
+                    <div class="face back">
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="card card-6">
+                    <div class="face front">
+                        <p>5</p>
+                    </div>
+                    <div class="face back">
+                        <p>6</p>
+                    </div>
+                </div>
+                <div class="card card-7">
+                    <div class="face front">
+                        <p>6</p>
+                    </div>
+                    <div class="face back">
+                        <p>7</p>
+                    </div>
+                </div>
+                <div class="card card-8">
+                    <div class="face front">
+                        <p>7</p>
+                    </div>
+                    <div class="face back">
+                        <p>8</p>
+                    </div>
+                </div>
+                <div class="card card-9">
+                    <div class="face front">
+                        <p>8</p>
+                    </div>
+                    <div class="face back">
+                        <p>9</p>
+                    </div>
+                </div>
+                <div class="card card-10">
+                    <div class="face front">
+                        <p>9</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="digit zero">
+                <div class="card card-0">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+                <div class="card card-1">
+                    <div class="face front">
+                        <p>0</p>
+                    </div>
+                    <div class="face back">
+                        <p>1</p>
+                    </div>
+                </div>
+                <div class="card card-2">
+                    <div class="face front">
+                        <p>1</p>
+                    </div>
+                    <div class="face back">
+                        <p>2</p>
+                    </div>
+                </div>
+                <div class="card card-3">
+                    <div class="face front">
+                        <p>2</p>
+                    </div>
+                    <div class="face back">
+                        <p>3</p>
+                    </div>
+                </div>
+                <div class="card card-4">
+                    <div class="face front">
+                        <p>3</p>
+                    </div>
+                    <div class="face back">
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="card card-5">
+                    <div class="face front">
+                        <p>4</p>
+                    </div>
+                    <div class="face back">
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="card card-6">
+                    <div class="face front">
+                        <p>5</p>
+                    </div>
+                    <div class="face back">
+                        <p>6</p>
+                    </div>
+                </div>
+                <div class="card card-7">
+                    <div class="face front">
+                        <p>6</p>
+                    </div>
+                    <div class="face back">
+                        <p>7</p>
+                    </div>
+                </div>
+                <div class="card card-8">
+                    <div class="face front">
+                        <p>7</p>
+                    </div>
+                    <div class="face back">
+                        <p>8</p>
+                    </div>
+                </div>
+                <div class="card card-9">
+                    <div class="face front">
+                        <p>8</p>
+                    </div>
+                    <div class="face back">
+                        <p>9</p>
+                    </div>
+                </div>
+                <div class="card card-10">
+                    <div class="face front">
+                        <p>9</p>
+                    </div>
+                    <div class="face back">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    <div id="dateDisplay"></div>
+    <video id="video" width="640" height="480" style="display:none;" autoplay></video>
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <div id="userInfo"></div>
+    <div id="countdownDisplay"></div>
+     <button id="captureBtn">To Begin, Capture Your Image.</button>
+    <div id="countdown"></div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-    navigator.permissions.query({name: 'microphone'})
-        .then((permissionObj) => {
-            console.log(permissionObj.state);
-        })
-        .catch((error) => {
-            console.log('Got error :', error);
-        })
 
-    navigator.permissions.query({name: 'camera'})
-        .then((permissionObj) => {
-            console.log(permissionObj.state);
-        })
-        .catch((error) => {
-            console.log('Got error :', error);
-        })
+$(document).ready(function() {
     let video = document.getElementById('video');
     let canvas = document.getElementById('canvas');
     let context = canvas.getContext('2d');
     let userInfoDiv = document.getElementById('userInfo');
+    let captureBtn = document.getElementById('captureBtn');
+    let countdownDiv = document.getElementById('countdown');
 
-    function updateUserInfo(data) {
-        userInfoDiv.innerHTML = `Last Seen: ${data.last_seen}`
-    }
-
-    navigator.mediaDevices.getUserMedia({video: true})
-        .then(stream => video.srcObject = stream)
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            video.play();
+            video.style.display = 'none';
+        })
         .catch(error => console.error('Error accessing media devices.', error));
 
-    setInterval(() => {
+    captureBtn.addEventListener('click', function() {
+        console.log("CLICKED")
+
+        let countdown = 5; // Starting countdown value
+         let countdownInterval = setInterval(function() {
+             if (countdown === 0) {
+            clearInterval(countdownInterval);}
+             console.log(countdown)
+             countdownDiv.innerText=countdown
+             countdown--
+         },1000
+         )
         context.drawImage(video, 0, 0, 640, 480);
         let imageDataUrl = canvas.toDataURL('image/png');
 
-        fetch('/process_frame', {
+        fetch('/compare_face', { // The endpoint where you compare the face
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({image: imageDataUrl})
+            body: JSON.stringify({ image: imageDataUrl })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    updateUserInfo(data);
-                }
-                console.log(data);  // For debugging
-            })
-            .catch(error => console.error('Error sending frame.', error));
-    }, 100); // Capture frame every 100ms, adjust this value as needed
+        .then(response => response.json())
+        .then(data => {
+            if (data.match) {
+                userInfoDiv.innerHTML = `Welcome back, ${data.username}.`;
+                updateClockWithLastSeenTime(data.last_seen);
+            } else {
+                userInfoDiv.innerHTML = "Face not recognized. Please try again.";
+            }
+        })
+        .catch(error => console.error('Error sending frame.', error));
+    });
+
+
+        function updateClockDigiadadt(selector, value) {
+            const digitElement = $(selector);
+            // Remove any existing digit class
+            digitElement.removeClass(function(index, className) {
+                return (className.match(/(^|\s)digit-\S+/g) || []).join(' ');
+            });
+            // Add the new digit class
+            digitElement.addClass(`digit-${value}`);
+        }
+    });
+function updateClockWithLastSeenTime(lastSeen) {
+    const datePart = lastSeen.split('T')[0]; // Extracts the YYYY-MM-DD part
+    const timePart = lastSeen.split('T')[1]; // Extracts the HH:MM:SS part
+    const [hours, minutes, seconds] = timePart.split(':').map(num => parseInt(num, 10));
+
+    // Update the clock digits
+    updateClockDigit('.hours .digit:first-of-type', Math.floor(hours / 10));
+    updateClockDigit('.hours .digit:last-of-type', hours % 10);
+    updateClockDigit('.minutes .digit:first-of-type', Math.floor(minutes / 10));
+    updateClockDigit('.minutes .digit:last-of-type', minutes % 10);
+    updateClockDigit('.seconds .digit:first-of-type', Math.floor(seconds / 10));
+    updateClockDigit('.seconds .digit:last-of-type', seconds % 10);
+
+    // Display the date
+    document.getElementById('dateDisplay').textContent = `Date: ${formatDate(datePart)}`;
+}
+
+function formatDate(dateString) {
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`; // Format the date as DD/MM/YYYY
+}
+
+function updateClockDigit(selector, value) {
+    const digitElement = $(selector);
+    // Remove any existing 'zero', 'one', ... 'nine' classes
+    digitElement.removeClass('zero one two three four five six seven eight nine');
+    // Add the new class based on value
+    digitElement.addClass(getDigitClass(value));
+}
+
+function getDigitClass(value) {
+    // Maps the numeric value to the corresponding class
+    const classes = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    return classes[value] || 'zero'; // Default to 'zero' if out of bounds
+}
+
+
 </script>
-</body>
-</html>
-{##}
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
-{#    <title>ClockWise</title>#}
-{#        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">#}
-{##}
-{#    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">#}
-{#</head>#}
-{#<body>#}
-{#<nav>#}
-{#    <a href="/">Home</a>#}
-{#    <a href="/about">About</a>#}
-{#</nav>#}
-{#<div class="container">#}
-{#    <h1 id="ClockWise">ClockWise</h1>#}
-{#    <video id="video" width="640" height="480" autoplay></video>#}
-{#    <canvas id="canvas" width="640" height="480"></canvas>#}
-{#    <div id="userInfo"></div>#}
-{#    <div id="clock"></div>#}
-{#</div>#}
-{##}
 {#<script>#}
+{#$(document).ready(function() {#}
 {#    let video = document.getElementById('video');#}
 {#    let canvas = document.getElementById('canvas');#}
 {#    let context = canvas.getContext('2d');#}
 {#    let userInfoDiv = document.getElementById('userInfo');#}
-{#    let clockDiv = document.getElementById('clock');#}
-{#    let faceDetected = false;#}
+{#    let captureBtn = document.getElementById('captureBtn');#}
+{#    let countdownDisplay = document.getElementById('countdownDisplay'); // Make sure this exists in your HTML#}
+{#    let countdownInterval; // To hold the setInterval#}
+{#    let capturing = false; // State of capturing#}
 {##}
-{#    function showTime() {#}
-{#        const now = new Date();#}
-{#        const hours = now.getHours().toString().padStart(2, '0');#}
-{#        const minutes = now.getMinutes().toString().padStart(2, '0');#}
-{#        const seconds = now.getSeconds().toString().padStart(2, '0');#}
-{#        clockDiv.textContent = `${hours}:${minutes}:${seconds}`;#}
-{#    }#}
-{##}
-{#    function updateUserInfo(data) {#}
-{#        userInfoDiv.innerHTML = `Last Seen: ${data.last_seen}`;#}
-{#    }#}
-{##}
-{#    navigator.mediaDevices.getUserMedia({video: true})#}
-{#        .then(stream => video.srcObject = stream)#}
+{#    navigator.mediaDevices.getUserMedia({ video: true })#}
+{#        .then(stream => {#}
+{#            video.srcObject = stream;#}
+{#            video.play();#}
+{#            video.style.display = 'none';#}
+{#        })#}
 {#        .catch(error => console.error('Error accessing media devices.', error));#}
 {##}
-{#    const intervalId = setInterval(() => {#}
-{#        if (faceDetected) {#}
-{#            return;#}
+{#    captureBtn.addEventListener('click', function() {#}
+{#        if (!capturing) {#}
+{#            capturing = true;#}
+{#            captureBtn.innerText = "Stop"; // Change button text to Stop#}
+{#            startCountdown(5); // Start a 5-second countdown#}
+{#        } else {#}
+{#            stopCapturing();#}
 {#        }#}
+{#    });#}
 {##}
+{#    function startCountdown(duration) {#}
+{#        let countdown = duration;#}
+{#        countdownDisplay.innerText = `Countdown: ${countdown}`; // Display initial countdown value#}
+{#        countdownInterval = setInterval(function() {#}
+{#            countdown--;#}
+{#            countdownDisplay.innerText = `Countdown: ${countdown}`;#}
+{#            if (countdown <= 0) {#}
+{#                captureFrame();#}
+{#                countdown = duration; // Reset countdown#}
+{#            }#}
+{#        }, 1000);#}
+{#    }#}
+{##}
+{#    function captureFrame() {#}
 {#        context.drawImage(video, 0, 0, 640, 480);#}
 {#        let imageDataUrl = canvas.toDataURL('image/png');#}
 {##}
-{#        fetch('/process_frame', {#}
+{#        fetch('/compare_face', { // The endpoint where you compare the face#}
 {#            method: 'POST',#}
 {#            headers: {#}
 {#                'Content-Type': 'application/json'#}
 {#            },#}
-{#            body: JSON.stringify({image: imageDataUrl})#}
+{#            body: JSON.stringify({ image: imageDataUrl })#}
 {#        })#}
-{#            .then(response => response.json())#}
-{#            .then(data => {#}
-{#                if (data.face_detected) {#}
-{#                    faceDetected = true;#}
-{#                    clearInterval(intervalId); // Stop sending frames#}
-{#                    video.style.display = 'none'; // Optionally hide the video element#}
-{#                    clockDiv.style.display = 'block'; // Show the clock#}
-{#                    setInterval(showTime, 1000); // Update the clock every second#}
-{#                }#}
-{#                console.log(data); // For debugging#}
-{#            })#}
-{#            .catch(error => console.error('Error sending frame.', error));#}
-{#    }, 100); // Capture frame every 100ms#}
+{#        .then(response => response.json())#}
+{#        .then(data => {#}
+{#            if (data.match) {#}
+{#                userInfoDiv.innerHTML = `Welcome back, ${data.username}.`;#}
+{#                // You might want to update the clock here or perform other actions#}
+{#            } else {#}
+{#                userInfoDiv.innerHTML = "Face not recognized. Please try again.";#}
+{#            }#}
+{#        })#}
+{#        .catch(error => console.error('Error sending frame.', error));#}
+{#    }#}
+{##}
+{#    function stopCapturing() {#}
+{#        clearInterval(countdownInterval); // Stop the countdown#}
+{#        capturing = false; // Update capturing state#}
+{#        captureBtn.innerText = "Capture"; // Change button text back to Capture#}
+{#        countdownDisplay.innerText = ""; // Clear countdown display#}
+{#    }#}
+{#});#}
+{#        function updateClockDigiadadt(selector, value) {#}
+{#            const digitElement = $(selector);#}
+{#            // Remove any existing digit class#}
+{#            digitElement.removeClass(function(index, className) {#}
+{#                return (className.match(/(^|\s)digit-\S+/g) || []).join(' ');#}
+{#            });#}
+{#            // Add the new digit class#}
+{#            digitElement.addClass(`digit-${value}`);#}
+{#        }#}
+{##}
+{#function updateClockWithLastSeenTime(lastSeen) {#}
+{#    const datePart = lastSeen.split('T')[0]; // Extracts the YYYY-MM-DD part#}
+{#    const timePart = lastSeen.split('T')[1]; // Extracts the HH:MM:SS part#}
+{#    const [hours, minutes, seconds] = timePart.split(':').map(num => parseInt(num, 10));#}
+{##}
+{#    // Update the clock digits#}
+{#    updateClockDigit('.hours .digit:first-of-type', Math.floor(hours / 10));#}
+{#    updateClockDigit('.hours .digit:last-of-type', hours % 10);#}
+{#    updateClockDigit('.minutes .digit:first-of-type', Math.floor(minutes / 10));#}
+{#    updateClockDigit('.minutes .digit:last-of-type', minutes % 10);#}
+{#    updateClockDigit('.seconds .digit:first-of-type', Math.floor(seconds / 10));#}
+{#    updateClockDigit('.seconds .digit:last-of-type', seconds % 10);#}
+{##}
+{#    // Display the date#}
+{#    document.getElementById('dateDisplay').textContent = `Date: ${formatDate(datePart)}`;#}
+{#}#}
+{##}
+{#function formatDate(dateString) {#}
+{#    const [year, month, day] = dateString.split('-');#}
+{#    return `${day}/${month}/${year}`; // Format the date as DD/MM/YYYY#}
+{#}#}
+{##}
+{#function updateClockDigit(selector, value) {#}
+{#    const digitElement = $(selector);#}
+{#    // Remove any existing 'zero', 'one', ... 'nine' classes#}
+{#    digitElement.removeClass('zero one two three four five six seven eight nine');#}
+{#    // Add the new class based on value#}
+{#    digitElement.addClass(getDigitClass(value));#}
+{#}#}
+{##}
+{#function getDigitClass(value) {#}
+{#    // Maps the numeric value to the corresponding class#}
+{#    const classes = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];#}
+{#    return classes[value] || 'zero'; // Default to 'zero' if out of bounds#}
+{#}#}
+{##}
+{##}
 {#</script>#}
-{#</body>#}
-{#</html>#}
+
+</body>
+</html>

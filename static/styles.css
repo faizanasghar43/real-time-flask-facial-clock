@@ -1,139 +1,475 @@
-/* Base styles for both pages */
-@font-face {
-    font-family: 'ClockWork';
-    src: url('/static/fonts/ClockWork.ttf') format('truetype');
-        font-display: swap; /* This will swap the font once it's loaded */
-
-
-
-}
-@font-face {
-    font-family: 'AtomicClockRadio';
-    src: url('/static/fonts/AtomicClockRadio.ttf') format('truetype');
-        font-display: swap; /* This will swap the font once it's loaded */
-
-}
-
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Orbitron', sans-serif; /* Use Orbitron for a techy feel, ensure it's linked in your HTML */
-    background-color: white; /* Light mode background */
-    color: #333333; /* Light mode text */
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for theme change */
-}
+html,
+body {
+  height: 100%;
+  position: relative; }
 
 body {
-    font-family: 'OrbitronCustom', sans-serif;
-}
+  background: #121212;
+  font-family: 'Roboto Condensed', sans-serif; }
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.clock {
+  perspective: 600px;
+  position: relative;
+  min-width: 780px; }
+
+.hours,
+.minutes {
+  width: 260px;
+  position: relative;
+  float: left; }
+  .hours:before, .hours:after,
+  .minutes:before,
+  .minutes:after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 100%;
+    position: absolute;
+    animation: pulse 1s infinite; }
+  .hours:before,
+  .minutes:before {
+    top: calc(50% - 10px);
+    right: 10px; }
+  .hours:after,
+  .minutes:after {
+    top: calc(50% + 10px);
+    right: 10px; }
+
+.seconds {
+  width: 260px;
+  position: relative;
+  float: left; }
+
+.digit {
+  width: 110px;
+  height: 160px;
+  position: relative;
+  float: left;
+  padding: 0 5px; }
+  .digit .card {
+    width: 110px;
+    height: 80px;
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    transform-origin: 50% 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all ease 1000ms; }
+    .digit .card:nth-of-type(1) {
+      z-index: 10; }
+    .digit .card:nth-of-type(2) {
+      z-index: 9; }
+    .digit .card:nth-of-type(3) {
+      z-index: 8; }
+    .digit .card:nth-of-type(4) {
+      z-index: 7; }
+    .digit .card:nth-of-type(5) {
+      z-index: 6; }
+    .digit .card:nth-of-type(6) {
+      z-index: 5; }
+    .digit .card:nth-of-type(7) {
+      z-index: 4; }
+    .digit .card:nth-of-type(8) {
+      z-index: 3; }
+    .digit .card:nth-of-type(9) {
+      z-index: 2; }
+    .digit .card:nth-of-type(10) {
+      z-index: 1; }
+  .digit .face {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110px;
+    height: 80px;
+    overflow: hidden; }
+    .digit .face p {
+      backface-visibility: hidden;
+      color: #fff;
+      font-size: 180px;
+      font-weight: bold;
+      position: absolute;
+      line-height: 200px;
+      padding: 0 10px;
+      margin: 0;
+      left: 0;
+      text-shadow: 0 0 5px #424242; }
+  .digit .front {
+    background: linear-gradient(0deg, #323232 40%, #424242);
+    border-radius: 6px 6px 0 0;
+    z-index: 2;
+    transform: rotateX(0deg); }
+    .digit .front p {
+      top: -15px; }
+    .digit .front:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 98%, rgba(0, 0, 0, 0.3)); }
+  .digit .back {
+    background: linear-gradient(-170deg, #323232 55%, #212121);
+    border-radius: 0 0 6px 6px;
+    transform: rotateX(180deg); }
+    .digit .back p {
+      top: -95px; }
+    .digit .back:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(7deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0.15)); }
+  .digit.zero .card-0 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.one .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.one .card-1 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.two .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.two .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.two .card-2 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.three .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.three .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.three .card-2 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.three .card-3 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.four .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.four .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.four .card-2 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.four .card-3 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.four .card-4 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.five .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.five .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.five .card-2 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.five .card-3 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.five .card-4 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.five .card-5 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.six .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.six .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.six .card-2 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.six .card-3 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.six .card-4 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.six .card-5 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.six .card-6 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.seven .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.seven .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.seven .card-2 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.seven .card-3 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.seven .card-4 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.seven .card-5 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.seven .card-6 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.seven .card-7 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.eight .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-2 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-3 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-4 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-5 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-6 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-7 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.eight .card-8 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+  .digit.nine .card-0 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-1 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-2 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-3 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-4 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-5 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-6 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-7 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-8 {
+    transform: rotateX(-180deg);
+    z-index: -1; }
+  .digit.nine .card-9 {
+    transform: rotateX(-180deg);
+    z-index: 10; }
+
+@keyframes pulse {
+  0%, 100% {
+    background: rgba(255, 255, 255, 0.3); }
+  50% {
+    background: rgba(255, 255, 255, 0.1); } }
+
+@media screen and (max-width: 800px) {
+  .clock {
+    min-width: 400px; }
+  .hours,
+  .minutes,
+  .seconds {
+    width: 200px; }
+  .digit {
+    width: 80px;
+    height: 130px; }
+    .digit .card {
+      width: 80px;
+      height: 65px; }
+      .digit .card .face {
+        width: 80px;
+        height: 65px; }
+        .digit .card .face p {
+          font-size: 160px;
+          padding: 0; }
+      .digit .card .front p {
+        top: -30px; } }
+
+@font-face {
+  font-family: 'ClockWork';
+  src: url("/static/fonts/ClockWork.ttf") format("truetype");
+  font-display: swap;
+  /* This will swap the font once it's loaded */ }
+
+@font-face {
+  font-family: 'AtomicClockRadio';
+  src: url("/static/fonts/AtomicClockRadio.ttf") format("truetype");
+  font-display: swap;
+  /* This will swap the font once it's loaded */ }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s; }
 
 nav {
-    width: 100%;
-    background-color: #333333; /* Darker shade for navbar in light mode */
-    color: white;
-    padding: 1rem 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    display: flex;
-    justify-content: center; /* Center nav items */
-}
-nav {
-    width: 100%;
-    background-color: #333333; /* Darker shade for navbar in light mode */
-    color: white;
-    padding: 1rem 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    display: flex;
-    justify-content: flex-end; /* Align items to the right */
-    padding-right: 20px; /* Adjust based on your layout */
-}
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 20px; }
 
 nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px; /* Spacing between nav links */
-    font-size: 18px;
-
-}
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px; }
 
 .container {
-    margin: 20px auto;
-    max-width: 800px; /* Max width for the content */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for container */
-    background-color: #F9F9F9; /* Light background for content */
-    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for theme change */
-}
+  margin: 20px auto;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #FFFFFF;
+  transition: background-color 0.3s, box-shadow 0.3s; }
+
+#ClockWise {
+  font-family: 'ClockWork', sans-serif;
+  font-size: 4em !important; }
+
+#dateDisplay, #userInfo {
+  font-family: 'AtomicClockRadio', sans-serif;
+  margin: inherit; }
 
 h1, h2 {
-    color: #D32F2F; /* Accent color for headings */
-}
+  color: #D32F2F; }
 
 p, a {
-    font-size: 16px; /* Readable font size */
-}
+  font-size: 16px; }
 
 a {
-    color: #0066CC; /* Default link color */
-}
+  color: #0066CC; }
 
-/*!* Dark mode styles *!*/
-/*@media (prefers-color-scheme: dark) {*/
-/*    body, html {*/
-/*        background-color: #121212; !* Dark mode background *!*/
-/*        color: #E0E0E0; !* Dark mode text *!*/
-/*    }*/
+/* Custom styles for face capture functionality */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  /* Adjust based on your layout */
+  margin: 20px auto;
+  /* Centering the video container */ }
 
-/*    nav {*/
-/*        background-color: #000000; !* Darker navbar background in dark mode *!*/
-/*    }*/
+#video {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  /* Show the video stream */ }
 
-/*    .container {*/
-/*        background-color: #242424; !* Dark background for content *!*/
-/*        box-shadow: 0 2px 4px rgba(255,255,255,0.1); !* Soft shadow for container in dark mode *!*/
-/*    }*/
+#capture {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #D32F2F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer; }
 
-/*    a {*/
-/*        color: #4D90FE; !* Brighter link color for dark mode *!*/
-/*    }*/
-/*}*/
-/* Hide video and canvas */
-video, canvas {
-    display: none;
-}
+#capture:hover {
+  background-color: #B71C1C; }
 
-/* Centering ClockWise text and clock */
-#ClockWise, #clock {
-    text-align: center; /* Centers the text */
-    width: 100%; /* Ensures full width for proper centering */
-}
+/* Hide the canvas element by default */
+#canvas {
+  display: none; }
 
-/* Additional styling for the ClockWise title to differentiate it */
-#ClockWise {
-    font-family: 'ClockWork', sans-serif; /* Applies your custom font */
-    margin-top: 2rem; /* Adds some space at the top */
-    font-size: 5rem; /* Adjust the font size as needed */
-}
+/* Additional styles */
+input[type="text"] {
+  width: calc(100% - 22px);
+  /* Full width with padding adjustment */
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc; }
 
-/* Styling for the clock to ensure it is visually distinct and properly centered */
-#userInfo {
-    margin-top: 20px; /* Space between the title and the clock */
-    font-size: 2rem; /* Large font size for visibility */
-    letter-spacing: 5px; /* Add spacing between characters */
-    font-family: 'AtomicClockRadio', sans-serif; /* Ensures consistency with the rest of the body */
-}
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer; }
 
-/* Ensuring the .container is centered and adjusts its layout properly */
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 60px); /* Adjusts height to ensure full vertical centering minus nav */
-}
+input[type="submit"]:hover {
+  background-color: #45a049; }
 
 .logo {
-    height: 50px; /* Adjust based on your preference */
-    margin-right: auto;
-    mix-blend-mode: multiply;
-}
+  height: 50px;
+  margin-right: auto;
+  mix-blend-mode: multiply; }
+
+.clock {
+  font-family: 'Roboto Condensed', sans-serif !important; }
+
+#captureBtn {
+  /* Updated from #capture to #captureBtn for consistency */
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #D32F2F;
+  /* Bootstrap primary blue */
+  color: white;
+  font-weight: bold;
+  /* Make the text bold */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  /* Smooth transition for hover effect */ }
+
+#captureBtn:hover {
+  background-color: #0056b3;
+  /* A darker shade of blue for hover state */ }
