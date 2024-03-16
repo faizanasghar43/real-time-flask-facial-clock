@@ -14,10 +14,17 @@ body {
   align-items: center;
   justify-content: center; }
 
+/*.clock {*/
+/*  perspective: 600px;*/
+/*  position: relative;*/
+/*  min-width: 780px; }*/
 .clock {
-  perspective: 600px;
-  position: relative;
-  min-width: 780px; }
+    perspective: 600px;
+    min-width: 780px;
+    display: flex; /* Center the clock horizontally */
+    justify-content: center; /* Center content inside the clock */
+    align-items: center; /* Center vertically if needed */
+}
 
 .hours,
 .minutes {
@@ -376,6 +383,7 @@ nav a {
   transition: background-color 0.3s, box-shadow 0.3s; }
 
 #ClockWise {
+  display: ruby-text;
   font-family: 'ClockWork', sans-serif;
   font-size: 4em !important; }
 
@@ -473,3 +481,20 @@ input[type="submit"]:hover {
 #captureBtn:hover {
   background-color: #0056b3;
   /* A darker shade of blue for hover state */ }
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  body, html {
+    background-color: #121212;
+    color: #e0e0e0; }
+  nav {
+    background-color: #242424; }
+  .container {
+    background-color: #333;
+    color: #e0e0e0;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); }
+  /* Adjust additional elements and components for dark mode as needed */ }
+/* Add this at the end of your styles.css to hide the last two 'digit' elements of seconds and minutes */
+.seconds .digit:nth-last-child(-n+2), .minutes::before, .minutes::after{
+    display: none;
+}
