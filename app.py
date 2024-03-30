@@ -145,7 +145,7 @@ def thank_you():
 
 
 @app.route('/failed')
-def thank_you():
+def failed():
     return render_template('Failed.html')
 
 @app.route('/add_info', methods=['GET', 'POST'])
