@@ -115,18 +115,6 @@ def compare_face():
         return jsonify({'status': 'error', 'message': 'No faces found in the submitted image.'})
 
 
-# def add_or_update_face(username, face_encoding):
-#     eastern = pytz.timezone('US/Eastern')
-#     # Get the current time in EST
-#     # now_in_eastern = datetime.now(eastern)
-#     known_face = KnownFace.query.filter_by(username=username).first()
-#     if known_face is None:
-#         known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=datetime.now(eastern))
-#         db.session.add(known_face)
-#     else:
-#         known_face.face_encoding = face_encoding
-#         known_face.last_seen = datetime.now()
-#     db.session.commit()
 def add_or_update_face(username, face_encoding):
     eastern = pytz.timezone('US/Eastern')
     now_in_eastern = datetime.now(eastern)
@@ -150,6 +138,10 @@ def add_or_update_face(username, face_encoding):
 def about():
     return render_template('about.html')
 
+
+@app.route('/thank_you')
+def about():
+    return render_template('ThanksPage.html')
 
 @app.route('/add_info', methods=['GET', 'POST'])
 def add_info():

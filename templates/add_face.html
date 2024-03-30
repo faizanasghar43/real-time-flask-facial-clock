@@ -93,60 +93,132 @@
         <br><br>
         <input type="submit" value="Submit">
     </form>
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('capture');
+    const imageInput = document.getElementById('image');
+    const usernameInput = document.getElementById('username');
 
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureButton = document.getElementById('capture');
-        const imageInput = document.getElementById('image');
-        const usernameInput = document.getElementById('username');
-
-        usernameInput.addEventListener('input', () => {
-            const username = usernameInput.value.trim();
-            if (username) { // If there is a username, show video and capture button
-                video.style.display = 'block';
-                captureButton.style.display = 'inline-block';
-            } else { // Otherwise, hide them
-                video.style.display = 'none';
-                captureButton.style.display = 'none';
-            }
-        });
-
-        // Get access to the camera
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-                video.srcObject = stream;
-                video.play();
-            });
+    usernameInput.addEventListener('input', () => {
+        const username = usernameInput.value.trim();
+        if (username) { // If there is a username, show video and capture button
+            video.style.display = 'block';
+            captureButton.style.display = 'inline-block';
+        } else { // Otherwise, hide them
+            video.style.display = 'none';
+            captureButton.style.display = 'none';
         }
+    });
 
-        // Capture the photo
-        captureButton.addEventListener('click', function() {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            canvas.style.display = 'block'; // Show the canvas after capturing the photo
-            const imageDataURL = canvas.toDataURL('image/png');
-            imageInput.value = imageDataURL; // Store the image data in the hidden input field
+    // Get access to the camera
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+            video.srcObject = stream;
+            video.play();
         });
-            document.addEventListener('DOMContentLoaded', function() {
-    const titles = [
-        "ClockWise: A Clock That Mimics Human Memory",
-        "ClockWise: Keeping You On Your Toes, One Glance at a Time",
-        "ClockWise: Time Remembered, Moments Forgotten: The Clock That Echoes Human Memory"
-    ];
-    let currentIndex = 0;
+    }
 
-    const pageTitle = document.getElementById('title-statement'); // Assuming you have an element with id="ClockWise"
+    // Capture the photo and submit the form
+    captureButton.addEventListener('click', function() {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.style.display = 'block'; // Show the canvas after capturing the photo
+        const imageDataURL = canvas.toDataURL('image/png');
+        imageInput.value = imageDataURL; // Store the image data in the hidden input field
 
-    setInterval(() => {
-        pageTitle.textContent = titles[currentIndex]; // Update the title text
-        currentIndex = (currentIndex + 1) % titles.length; // Move to the next title, loop back to the first after the last
-    }, 4000); // Change title every 4000 milliseconds (4 seconds)
-});
+        // Submit the form
+        const form = document.querySelector('form');
+        const formData = new FormData(form);
+        fetch('/add_info', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/thank_you'; // Redirect to thank you page on success
+            } else {
+                console.error('Form submission failed.');
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting form:', error);
+        });
+    });
+</script>
 
-    </script>
+{#    <script>#}
+{#        const video = document.getElementById('video');#}
+{#        const canvas = document.getElementById('canvas');#}
+{#        const captureButton = document.getElementById('capture');#}
+{#        const imageInput = document.getElementById('image');#}
+{#        const usernameInput = document.getElementById('username');#}
+{##}
+{#        usernameInput.addEventListener('input', () => {#}
+{#            const username = usernameInput.value.trim();#}
+{#            if (username) { // If there is a username, show video and capture button#}
+{#                video.style.display = 'block';#}
+{#                captureButton.style.display = 'inline-block';#}
+{#            } else { // Otherwise, hide them#}
+{#                video.style.display = 'none';#}
+{#                captureButton.style.display = 'none';#}
+{#            }#}
+{#        });#}
+{##}
+{#        // Get access to the camera#}
+{#        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {#}
+{#            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {#}
+{#                video.srcObject = stream;#}
+{#                video.play();#}
+{#            });#}
+{#        }#}
+{##}
+{#        // Capture the photo#}
+{#        captureButton.addEventListener('click', function() {#}
+{#            const context = canvas.getContext('2d');#}
+{#            canvas.width = video.videoWidth;#}
+{#            canvas.height = video.videoHeight;#}
+{#            context.drawImage(video, 0, 0, canvas.width, canvas.height);#}
+{#            canvas.style.display = 'block'; // Show the canvas after capturing the photo#}
+{#            const imageDataURL = canvas.toDataURL('image/png');#}
+{#            imageInput.value = imageDataURL; // Store the image data in the hidden input field#}
+{#            // Submit the form#}
+{#        const form = document.querySelector('form');#}
+{#        const formData = new FormData(form);#}
+{#        fetch('/add_info', {#}
+{#            method: 'POST',#}
+{#            body: formData#}
+{#        })#}
+{#        .then(response => {#}
+{#            if (response.ok) {#}
+{#                window.location.href = '/thank_you'; // Redirect to thank you page on success#}
+{#            } else {#}
+{#                console.error('Form submission failed.');#}
+{#            }#}
+{#        })#}
+{#        .catch(error => {#}
+{#            console.error('Error submitting form:', error);#}
+{#        });#}
+{#        });#}
+{#            document.addEventListener('DOMContentLoaded', function() {#}
+{#    const titles = [#}
+{#        "ClockWise: A Clock That Mimics Human Memory",#}
+{#        "ClockWise: Keeping You On Your Toes, One Glance at a Time",#}
+{#        "ClockWise: Time Remembered, Moments Forgotten: The Clock That Echoes Human Memory"#}
+{#    ];#}
+{#    let currentIndex = 0;#}
+{##}
+{#    const pageTitle = document.getElementById('title-statement'); // Assuming you have an element with id="ClockWise"#}
+{##}
+{#    setInterval(() => {#}
+{#        pageTitle.textContent = titles[currentIndex]; // Update the title text#}
+{#        currentIndex = (currentIndex + 1) % titles.length; // Move to the next title, loop back to the first after the last#}
+{#    }, 4000); // Change title every 4000 milliseconds (4 seconds)#}
+{#});#}
+{##}
+{#    </script>#}
 </body>
 </html>
 {#<!DOCTYPE html>#}
