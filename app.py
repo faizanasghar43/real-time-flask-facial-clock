@@ -140,7 +140,7 @@ def about():
 
 
 @app.route('/thank_you')
-def about():
+def thank_you():
     return render_template('ThanksPage.html')
 
 @app.route('/add_info', methods=['GET', 'POST'])
