@@ -47,7 +47,6 @@ body {
   float:left;
   &:before,
   &:after {
-    content:'';
     display: block;
     width:10px;
     height:10px;
@@ -66,7 +65,7 @@ body {
   }
 }
 
-.seconds {
+#meridiem {
   width:260px;
   position: relative;
   float:left;

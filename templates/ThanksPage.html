@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+{#    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">#}
+     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% assets "asset_css" %}
+  <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"/>
+{% endassets %}
+{#    <link rel="stylesheet" href="/static/styles.css">#}
     <title>Thank You</title>
     <style>
         body {
             font-family: 'Orbitron', sans-serif;
-            background-color: #f3f3f3;
-            color: #333;
+            {#background-color: #f3f3f3;#}
+            {#color: #333;#}
             text-align: center;
             margin: 0;
             padding: 0;
@@ -47,9 +52,16 @@
 <body>
 
 <div class="container">
-    <h1>Thank You!</h1>
-    <p>Your information has been successfully submitted.</p>
-    <p><a href="/">Return to Home</a></p>
+    {% if status == 'success' %}
+        <h1>Thank You!</h1>
+        <p>{{ message }}</p>
+        <p><a href="/">Return to Home</a></p>
+    {% else %}
+        <h1>Error</h1>
+        <p>{{ message }}</p>
+    <p><a href="/face">Try again</a></p>
+
+    {% endif %}
 </div>
 </body>
 </html>

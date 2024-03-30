@@ -63,6 +63,7 @@ def add_face():
         if face_encodings:
             message = add_or_update_face(username, face_encodings[0])
             return jsonify({'status': 'success', 'message': message})
+            # return render_template('ThanksPage.html', message=message)
         else:
             return jsonify({'status': 'error', 'message': 'No faces found in the image.'})
     return render_template('add_face.html')
@@ -96,12 +97,13 @@ def compare_face():
             if best_match_index is not None and matches[best_match_index]:
                 # A match was found, update last_seen
                 known_face = KnownFace.query.all()[best_match_index]
+                last_seen=known_face.last_seen
                 known_face.last_seen = datetime.utcnow()
                 db.session.commit()
                 print({'status': 'success', 'match': True, 'username': known_face.username,
-                       'last_seen': known_face.last_seen.isoformat()})
+                       'last_seen': last_seen.isoformat()})
                 return jsonify({'status': 'success', 'match': True, 'username': known_face.username,
-                                'last_seen': known_face.last_seen.isoformat()})
+                                'last_seen': last_seen.isoformat()})
 
             else:
                 # No match found
@@ -139,14 +141,13 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/thank_you')
-def thank_you():
-    return render_template('ThanksPage.html')
+# @app.route('/thank_you')
+# def thank_you(msg):
+#
+#     return render_template('ThanksPage.html', message=msg)
 
 
-@app.route('/failed')
-def failed():
-    return render_template('Failed.html')
+
 
 @app.route('/add_info', methods=['GET', 'POST'])
 def add_info():
@@ -165,11 +166,15 @@ def add_info():
                 # Only consider the first face found in the image for this example
                 face_encoding = face_encodings[0]
                 add_or_update_face(username, face_encoding)
-                return jsonify({'status': 'success', 'message': 'Face added/updated successfully.'})
+                # return jsonify({'status': 'success', 'message': 'Face added/updated successfully.'})
+                return render_template('ThanksPage.html', message="Face added/updated successfully.", status='success')
             else:
-                return jsonify({'status': 'error', 'message': 'No faces found in the submitted image.'})
+                # return jsonify({'status': 'error', 'message': })
+                return render_template('ThanksPage.html', message='No faces found in the submitted image.', status='error')
+
         else:
-            return jsonify({'status': 'error', 'message': 'No image data provided.'})
+            # return jsonify({'status': 'error', 'message': })
+            return render_template('ThanksPage.html', message='No image data provided.', status='error')
 
     # Render a form for GET request
     return render_template('add_face.html')
