@@ -141,6 +141,8 @@
                 window.location.href = '/thank_you'; // Redirect to thank you page on success
             } else {
                 console.error('Form submission failed.');
+                window.location.href = '/failed'; // Redirect to thank you page on success
+
             }
         })
         .catch(error => {

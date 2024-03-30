@@ -143,6 +143,11 @@ def about():
 def thank_you():
     return render_template('ThanksPage.html')
 
+
+@app.route('/failed')
+def thank_you():
+    return render_template('Failed.html')
+
 @app.route('/add_info', methods=['GET', 'POST'])
 def add_info():
     if request.method == 'POST':
