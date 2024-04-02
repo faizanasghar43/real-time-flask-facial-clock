@@ -27,6 +27,7 @@ body {
   .hours:before, .hours:after,
   .minutes:before,
   .minutes:after {
+    content: '';
     display: block;
     width: 10px;
     height: 10px;
@@ -42,6 +43,9 @@ body {
   .minutes:after {
     top: calc(50% + 10px);
     right: 10px; }
+
+.minutes:after, .minutes:before {
+  display: none; }
 
 #meridiem {
   width: 260px;
