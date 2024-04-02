@@ -15,6 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 assets = Environment(app)
+opacity_flag = False  # By default, do not alter the opacity
 
 # create bundle for Flask-Assets to compile and prefix scss to css
 scss_bundle = Bundle(
@@ -47,9 +48,19 @@ class KnownFace(db.Model):
 #     db.create_all()
 
 
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', opacity_flag=opacity_flag)
+
+@app.route('/set-opacity-zero', methods=['POST'])
+def set_opacity_zero():
+    global opacity_flag
+    opacity_flag = True  # Set the flag to indicate opacity should be zero
+    return jsonify({'status': 'success', 'message': 'Homepage opacity will be set to zero.'})
 
 
 @app.route('/face', methods=['GET', 'POST'])
@@ -179,6 +190,11 @@ def add_info():
     # Render a form for GET request
     return render_template('add_face.html')
 
+@app.route('/reset-opacity', methods=['POST'])
+def reset_opacity():
+    global opacity_flag
+    opacity_flag = False  # Reset the flag
+    return jsonify({'status': 'success', 'message': 'Homepage opacity reset to default.'})
 
 if __name__ == '__main__':
     app.run(debug=True)

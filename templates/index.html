@@ -9,6 +9,12 @@
   <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"/>
 {% endassets %}
     <title>ClockWise</title>
+<style>
+        body {
+            opacity: {{ '0' if opacity_flag else '1' }};
+            transition: opacity 0.5s ease;  /* Smooth transition for the opacity change */
+        }
+    </style>
 </head>
 <body>
 <nav>
