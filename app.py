@@ -109,7 +109,8 @@ def compare_face():
                 # A match was found, update last_seen
                 known_face = KnownFace.query.all()[best_match_index]
                 last_seen=known_face.last_seen
-                known_face.last_seen = datetime.utcnow()
+                eastern = pytz.timezone('US/Eastern')
+                known_face.last_seen = datetime.now(eastern)
                 db.session.commit()
                 print({'status': 'success', 'match': True, 'username': known_face.username,
                        'last_seen': last_seen.isoformat()})
