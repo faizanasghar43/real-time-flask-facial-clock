@@ -355,8 +355,8 @@ body, html {
 
 nav {
   width: 100%;
-  background-color: #333;
-  color: white;
+/*   background-color: #333;
+  color: white; */
   padding: 1rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -375,7 +375,7 @@ nav a {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #FFFFFF;
+/*   background-color: #FFFFFF; */
   transition: background-color 0.3s, box-shadow 0.3s; }
 
 #ClockWise {
@@ -476,4 +476,19 @@ input[type="submit"]:hover {
 #captureBtn:hover {
   background-color: #0056b3;
   /* A darker shade of blue for hover state */ }
+body,
+html {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+nav {
+    background-color: #333;
+    color: white;
+}
+
+.container {
+    background-color: #121212 !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
 
