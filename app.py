@@ -41,11 +41,11 @@ class KnownFace(db.Model):
         return f'<KnownFace {self.username}>'
 
 
-#
-#
-# @app.before_request
-# def create_tables():
-#     db.create_all()
+
+
+@app.before_request
+def create_tables():
+    db.create_all()
 
 
 # @app.route('/')
