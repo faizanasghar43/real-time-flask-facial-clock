@@ -199,9 +199,18 @@
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+If you want to simply adjust the time by subtracting 4 hours from the current time, you can do this without needing to rely on timezone libraries. You can use Python's `datetime` and `timedelta` modules to perform this operation.
+
+Here's how you can update your code:
+
+1. **Adjust the time by subtracting 4 hours from the current time wherever necessary.**
+
+### Updated Code
+
+```python
+from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import numpy as np
 import face_recognition
@@ -210,7 +219,6 @@ import base64
 import io
 from PIL import Image
 from flask_assets import Environment, Bundle
-import pytz
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
@@ -231,7 +239,6 @@ scss_bundle = Bundle(
 assets.register('scss_all', scss_bundle)
 scss_bundle.build()
 
-
 # Model for storing known faces
 class KnownFace(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -241,7 +248,6 @@ class KnownFace(db.Model):
 
     def __repr__(self):
         return f'<KnownFace {self.username}>'
-
 
 @app.route('/')
 def index():
@@ -298,8 +304,7 @@ def compare_face():
                 # A match was found, update last_seen
                 known_face = known_faces[best_match_index]
                 last_seen = known_face.last_seen
-                eastern = pytz.timezone('US/Eastern')
-                known_face.last_seen = datetime.now(tz=eastern)
+                known_face.last_seen = datetime.now() - timedelta(hours=4)
                 db.session.commit()
                 return jsonify({'status': 'success', 'match': True, 'username': known_face.username,
                                 'last_seen': last_seen.isoformat()})
@@ -312,18 +317,17 @@ def compare_face():
         return jsonify({'status': 'error', 'message': 'No faces found in the submitted image.'})
 
 def add_or_update_face(username, face_encoding):
-    eastern = pytz.timezone('US/Eastern')
-    now_in_eastern = datetime.now(tz=eastern)
+    now_minus_4_hours = datetime.now() - timedelta(hours=4)
 
     known_face = KnownFace.query.filter_by(username=username).first()
     if known_face:
         # If the face is already in the database, update the last seen and face encoding
         known_face.face_encoding = face_encoding
-        known_face.last_seen = now_in_eastern
+        known_face.last_seen = now_minus_4_hours
         message = "Your face is already there. Information updated."
     else:
         # If the face is not in the database, add it
-        known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=now_in_eastern)
+        known_face = KnownFace(username=username, face_encoding=face_encoding, last_seen=now_minus_4_hours)
         db.session.add(known_face)
         message = "New face added successfully."
 
