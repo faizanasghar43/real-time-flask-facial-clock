@@ -199,11 +199,11 @@
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
-If you want to simply adjust the time by subtracting 4 hours from the current time, you can do this without needing to rely on timezone libraries. You can use Python's `datetime` and `timedelta` modules to perform this operation.
+# If you want to simply adjust the time by subtracting 4 hours from the current time, you can do this without needing to rely on timezone libraries. You can use Python's `datetime` and `timedelta` modules to perform this operation.
 
-Here's how you can update your code:
+# Here's how you can update your code:
 
-1. **Adjust the time by subtracting 4 hours from the current time wherever necessary.**
+# 1. **Adjust the time by subtracting 4 hours from the current time wherever necessary.**
 
 ### Updated Code
 
