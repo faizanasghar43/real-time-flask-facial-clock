@@ -110,7 +110,7 @@ def compare_face():
                 known_face = KnownFace.query.all()[best_match_index]
                 last_seen=known_face.last_seen
                 eastern = pytz.timezone('US/Eastern')
-                known_face.last_seen = datetime.now(eastern)
+                known_face.last_seen = datetime.now(tz=eastern)
                 db.session.commit()
                 print({'status': 'success', 'match': True, 'username': known_face.username,
                        'last_seen': last_seen.isoformat()})
@@ -131,7 +131,7 @@ def compare_face():
 
 def add_or_update_face(username, face_encoding):
     eastern = pytz.timezone('US/Eastern')
-    now_in_eastern = datetime.now(eastern)
+    now_in_eastern = datetime.now(tz=eastern)
 
     known_face = KnownFace.query.filter_by(username=username).first()
     if known_face:
