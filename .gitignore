@@ -1,0 +1,11 @@
+*.json
+.env
+.idea
+.DS_Store
+known_faces.csv
+rekognition-access-policy.json
+zappa_settings.json
+venv
+*.jpeg
+__pycache__/
+*.pyc
