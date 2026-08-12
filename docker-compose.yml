@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8000"
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: clockwise
+      POSTGRES_USER: clockwise
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - clockwise_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clockwise"]
+      interval: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  clockwise_db:
